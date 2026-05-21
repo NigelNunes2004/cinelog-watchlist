@@ -1,4 +1,5 @@
 import { createContext, useContext, useMemo, useState, ReactNode } from "react";
+// @ts-expect-error - JS mock data, no types
 import { initialMovies } from "@/mock/data";
 
 export type MovieStatus = "unwatched" | "watching" | "watched";
