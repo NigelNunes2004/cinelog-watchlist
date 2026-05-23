@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import * as api from "@/api/movies";
+import { useAuth } from "@/store/AuthContext";
 
 export type MovieStatus = "unwatched" | "watching" | "watched";
 
@@ -31,7 +32,7 @@ export interface StatsData {
 interface Ctx {
   movies: Movie[];
   loading: boolean;
-  stats: StatsData | null;       
+  stats: StatsData | null;
   getMovie: (id: number) => Movie | undefined;
   addMovie: (m: Omit<Movie, "id" | "created_at">) => Promise<void>;
   updateMovie: (id: number, patch: Partial<Movie>) => Promise<void>;
@@ -45,12 +46,14 @@ interface Ctx {
 const MoviesContext = createContext<Ctx | null>(null);
 
 export function MoviesProvider({ children }: { children: ReactNode }) {
+  const { user, loading: authLoading } = useAuth();
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState<StatsData | null>(null);
 
   const refreshMovies = async () => {
     try {
+      setLoading(true);
       const data = await api.getMovies();
       setMovies(data);
     } catch (err) {
@@ -60,26 +63,47 @@ export function MoviesProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Load movies from backend on first render
+  const fetchStats = async () => {
+    try {
+      const data = await api.getStats();
+      setStats(data);
+    } catch (err) {
+      console.error("Failed to fetch stats:", err);
+    }
+  };
+
   useEffect(() => {
+    if (authLoading) return;
+
+    if (!user) {
+      setMovies([]);
+      setStats(null);
+      setLoading(false);
+      return;
+    }
+
     refreshMovies();
-  }, []);
+    fetchStats();
+  }, [user?.id, authLoading]);
 
   const getMovie = (id: number | string) => movies.find((m) => m.id === Number(id));
 
   const addMovie = async (m: Omit<Movie, "id" | "created_at">) => {
     await api.createMovie(m);
     await refreshMovies();
+    await fetchStats();
   };
 
   const updateMovie = async (id: number, patch: Partial<Movie>) => {
     await api.updateMovie(id, patch);
     await refreshMovies();
+    await fetchStats();
   };
 
   const deleteMovie = async (id: number) => {
     await api.deleteMovie(id);
     await refreshMovies();
+    await fetchStats();
   };
 
   const toggleTopTen = async (id: number) => {
@@ -103,6 +127,7 @@ export function MoviesProvider({ children }: { children: ReactNode }) {
       }
     }
     await refreshMovies();
+    await fetchStats();
   };
 
   const setTopTenRank = async (id: number, rank: number | null) => {
@@ -115,6 +140,7 @@ export function MoviesProvider({ children }: { children: ReactNode }) {
       await api.updateTopTen([...currentTopTen, { movie_id: id, rank }]);
     }
     await refreshMovies();
+    await fetchStats();
   };
 
   const incrementRewatch = async (id: number) => {
@@ -122,6 +148,7 @@ export function MoviesProvider({ children }: { children: ReactNode }) {
     if (!movie) return;
     await api.updateMovie(id, { rewatch_count: movie.rewatch_count + 1 });
     await refreshMovies();
+    await fetchStats();
   };
 
   return (

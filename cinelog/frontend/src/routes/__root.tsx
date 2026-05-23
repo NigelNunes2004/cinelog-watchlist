@@ -11,6 +11,7 @@ import {
 
 import appCss from "../styles.css?url";
 import { AuthProvider } from "@/store/AuthContext";
+import { MoviesProvider } from "@/store/MoviesContext";
 import { RequireAuth } from "@/components/RequireAuth";
 
 function NotFoundComponent() {
@@ -125,13 +126,15 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        {isAuthPage ? (
-          <Outlet />
-        ) : (
-          <RequireAuth>
+        <MoviesProvider>
+          {isAuthPage ? (
             <Outlet />
-          </RequireAuth>
-        )}
+          ) : (
+            <RequireAuth>
+              <Outlet />
+            </RequireAuth>
+          )}
+        </MoviesProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
