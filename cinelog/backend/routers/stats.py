@@ -7,7 +7,7 @@ import models
 router = APIRouter(prefix="/stats", tags=["stats"])
 
 
-@router.get("/")
+@router.get("")
 def get_stats(db: Session = Depends(get_db)):
     total_movies = db.query(models.Movie).count()
 

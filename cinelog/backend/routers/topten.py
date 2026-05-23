@@ -8,7 +8,7 @@ import schemas
 router = APIRouter(prefix="/topten", tags=["topten"])
 
 
-@router.get("/", response_model=List[schemas.MovieResponse])
+@router.get("", response_model=List[schemas.MovieResponse])
 def get_top_ten(db: Session = Depends(get_db)):
     return (
         db.query(models.Movie)
@@ -18,18 +18,16 @@ def get_top_ten(db: Session = Depends(get_db)):
     )
 
 
-@router.put("/")
+@router.put("")
 def update_top_ten(rankings: List[dict], db: Session = Depends(get_db)):
     db.query(models.Movie).filter(models.Movie.is_top_ten == True).update(
         {"is_top_ten": False, "top_ten_rank": None}
     )
-
     for item in rankings:
         movie = db.query(models.Movie).filter(models.Movie.id == item["movie_id"]).first()
         if movie:
             movie.is_top_ten = True
             movie.top_ten_rank = item["rank"]
-
     db.commit()
     return {"message": "Top 10 updated"}
 

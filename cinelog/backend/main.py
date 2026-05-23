@@ -2,11 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
 import models
-from routers import movies, topten, stats
+from routers import movies, topten, stats, search
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="CineLog API", version="1.0.0")
+app = FastAPI(title="CineLog API", version="1.0.0", redirect_slashes=False)
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,6 +22,7 @@ app.add_middleware(
 app.include_router(movies.router)
 app.include_router(topten.router)
 app.include_router(stats.router)
+app.include_router(search.router)
 
 @app.get("/")
 def root():

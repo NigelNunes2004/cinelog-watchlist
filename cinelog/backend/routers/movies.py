@@ -9,7 +9,7 @@ import schemas
 router = APIRouter(prefix="/movies", tags=["movies"])
 
 
-@router.get("/", response_model=List[schemas.MovieResponse])
+@router.get("", response_model=List[schemas.MovieResponse])
 def get_movies(
     genre: Optional[str] = Query(None),
     status: Optional[schemas.WatchStatus] = Query(None),
@@ -44,7 +44,7 @@ def get_movie(movie_id: int, db: Session = Depends(get_db)):
     return movie
 
 
-@router.post("/", response_model=schemas.MovieResponse, status_code=201)
+@router.post("", response_model=schemas.MovieResponse, status_code=201)
 def create_movie(movie: schemas.MovieCreate, db: Session = Depends(get_db)):
     db_movie = models.Movie(**movie.model_dump())
     db.add(db_movie)

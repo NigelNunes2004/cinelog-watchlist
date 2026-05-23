@@ -19,9 +19,19 @@ export interface Movie {
   created_at: string;
 }
 
+export interface StatsData {
+  total_movies: number;
+  total_watched: number;
+  average_rating: number | null;
+  most_rewatched: string | null;
+  genre_breakdown: { genre: string; count: number }[];
+  rating_distribution: { rating: number; count: number }[];
+}
+
 interface Ctx {
   movies: Movie[];
   loading: boolean;
+  stats: StatsData | null;       
   getMovie: (id: number) => Movie | undefined;
   addMovie: (m: Omit<Movie, "id" | "created_at">) => Promise<void>;
   updateMovie: (id: number, patch: Partial<Movie>) => Promise<void>;
@@ -37,6 +47,7 @@ const MoviesContext = createContext<Ctx | null>(null);
 export function MoviesProvider({ children }: { children: ReactNode }) {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<StatsData | null>(null);
 
   const refreshMovies = async () => {
     try {
@@ -117,6 +128,7 @@ export function MoviesProvider({ children }: { children: ReactNode }) {
     <MoviesContext.Provider value={{
       movies,
       loading,
+      stats,
       getMovie,
       addMovie,
       updateMovie,
