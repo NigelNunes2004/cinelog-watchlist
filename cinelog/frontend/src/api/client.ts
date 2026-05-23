@@ -7,10 +7,12 @@ export const tokenStorage = {
   getAccess: () => (typeof window !== 'undefined' ? localStorage.getItem(ACCESS_KEY) : null),
   getRefresh: () => (typeof window !== 'undefined' ? localStorage.getItem(REFRESH_KEY) : null),
   setTokens: (access: string, refresh: string) => {
+    if (typeof window === 'undefined') return
     localStorage.setItem(ACCESS_KEY, access)
     localStorage.setItem(REFRESH_KEY, refresh)
   },
   clear: () => {
+    if (typeof window === 'undefined') return
     localStorage.removeItem(ACCESS_KEY)
     localStorage.removeItem(REFRESH_KEY)
   },

@@ -4,12 +4,14 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
 import { AuthProvider } from "@/store/AuthContext";
+import { RequireAuth } from "@/components/RequireAuth";
 
 function NotFoundComponent() {
   return (
@@ -117,11 +119,19 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAuthPage = pathname.startsWith("/auth");
 
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Outlet />
+        {isAuthPage ? (
+          <Outlet />
+        ) : (
+          <RequireAuth>
+            <Outlet />
+          </RequireAuth>
+        )}
       </AuthProvider>
     </QueryClientProvider>
   );
