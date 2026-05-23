@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
 import models
 import os
-from routers import movies, topten, stats, search
+from routers import movies, topten, stats, search, auth
 
 Base.metadata.create_all(bind=engine)
 
@@ -24,6 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth.router)
 app.include_router(movies.router)
 app.include_router(topten.router)
 app.include_router(stats.router)

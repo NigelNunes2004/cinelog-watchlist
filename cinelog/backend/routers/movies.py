@@ -5,8 +5,13 @@ from typing import Optional, List
 from database import get_db
 import models
 import schemas
+from deps import get_current_user
 
 router = APIRouter(prefix="/movies", tags=["movies"])
+
+
+def _user_movies(db: Session, user_id: int):
+    return db.query(models.Movie).filter(models.Movie.user_id == user_id)
 
 
 @router.get("", response_model=List[schemas.MovieResponse])
@@ -16,9 +21,10 @@ def get_movies(
     search: Optional[str] = Query(None),
     sort_by: Optional[str] = Query("created_at", enum=["title", "rating", "release_year", "created_at"]),
     order: Optional[str] = Query("desc", enum=["asc", "desc"]),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
 ):
-    query = db.query(models.Movie)
+    query = _user_movies(db, current_user.id)
 
     if genre:
         query = query.filter(models.Movie.genre.ilike(f"%{genre}%"))
@@ -37,16 +43,24 @@ def get_movies(
 
 
 @router.get("/{movie_id}", response_model=schemas.MovieResponse)
-def get_movie(movie_id: int, db: Session = Depends(get_db)):
-    movie = db.query(models.Movie).filter(models.Movie.id == movie_id).first()
+def get_movie(
+    movie_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    movie = _user_movies(db, current_user.id).filter(models.Movie.id == movie_id).first()
     if not movie:
         raise HTTPException(status_code=404, detail="Movie not found")
     return movie
 
 
 @router.post("", response_model=schemas.MovieResponse, status_code=201)
-def create_movie(movie: schemas.MovieCreate, db: Session = Depends(get_db)):
-    db_movie = models.Movie(**movie.model_dump())
+def create_movie(
+    movie: schemas.MovieCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    db_movie = models.Movie(**movie.model_dump(), user_id=current_user.id)
     db.add(db_movie)
     db.commit()
     db.refresh(db_movie)
@@ -54,8 +68,13 @@ def create_movie(movie: schemas.MovieCreate, db: Session = Depends(get_db)):
 
 
 @router.patch("/{movie_id}", response_model=schemas.MovieResponse)
-def update_movie(movie_id: int, updates: schemas.MovieUpdate, db: Session = Depends(get_db)):
-    movie = db.query(models.Movie).filter(models.Movie.id == movie_id).first()
+def update_movie(
+    movie_id: int,
+    updates: schemas.MovieUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    movie = _user_movies(db, current_user.id).filter(models.Movie.id == movie_id).first()
     if not movie:
         raise HTTPException(status_code=404, detail="Movie not found")
 
@@ -69,8 +88,12 @@ def update_movie(movie_id: int, updates: schemas.MovieUpdate, db: Session = Depe
 
 
 @router.delete("/{movie_id}", status_code=204)
-def delete_movie(movie_id: int, db: Session = Depends(get_db)):
-    movie = db.query(models.Movie).filter(models.Movie.id == movie_id).first()
+def delete_movie(
+    movie_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    movie = _user_movies(db, current_user.id).filter(models.Movie.id == movie_id).first()
     if not movie:
         raise HTTPException(status_code=404, detail="Movie not found")
     db.delete(movie)

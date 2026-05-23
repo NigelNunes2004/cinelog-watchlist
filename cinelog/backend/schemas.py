@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
 from enum import Enum
 from datetime import datetime
@@ -48,3 +48,36 @@ class MovieResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UserSignup(BaseModel):
+    email: EmailStr
+    password: str = Field(..., min_length=8, max_length=128)
+    display_name: Optional[str] = Field(None, max_length=100)
+
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class UserResponse(BaseModel):
+    id: int
+    email: str
+    display_name: Optional[str]
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+    expires_in: int
+    user: UserResponse
+
+
+class RefreshRequest(BaseModel):
+    refresh_token: str

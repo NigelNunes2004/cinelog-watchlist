@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
-import { MoviesProvider } from "@/store/MoviesContext";
+import { AuthProvider } from "@/store/AuthContext";
 
 function NotFoundComponent() {
   return (
@@ -120,9 +120,9 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MoviesProvider>
+      <AuthProvider>
         <Outlet />
-      </MoviesProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

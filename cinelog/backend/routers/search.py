@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query, HTTPException
+from fastapi import APIRouter, Query, HTTPException, Depends
 from dotenv import load_dotenv
 import requests
 import os
@@ -8,6 +8,9 @@ load_dotenv()
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 TMDB_BASE_URL = "https://api.themoviedb.org/3"
 TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/w500"
+
+import models
+from deps import get_current_user
 
 router = APIRouter(prefix="/search", tags=["search"])
 
@@ -21,7 +24,10 @@ GENRE_MAP = {
 
 
 @router.get("")
-def search_movies(q: str = Query(..., min_length=1)):
+def search_movies(
+    q: str = Query(..., min_length=1),
+    _current_user: models.User = Depends(get_current_user),
+):
     if not TMDB_API_KEY:
         raise HTTPException(status_code=500, detail="TMDB API key not configured")
 

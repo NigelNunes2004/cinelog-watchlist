@@ -3,37 +3,46 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from database import get_db
 import models
+from deps import get_current_user
 
 router = APIRouter(prefix="/stats", tags=["stats"])
 
 
-@router.get("")
-def get_stats(db: Session = Depends(get_db)):
-    total_movies = db.query(models.Movie).count()
+def _user_movies(db: Session, user_id: int):
+    return db.query(models.Movie).filter(models.Movie.user_id == user_id)
 
-    total_watched = db.query(models.Movie).filter(
+
+@router.get("")
+def get_stats(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    base = _user_movies(db, current_user.id)
+
+    total_movies = base.count()
+
+    total_watched = base.filter(
         models.Movie.status == models.WatchStatus.watched
     ).count()
 
-    avg_rating = db.query(func.avg(models.Movie.rating)).scalar()
+    avg_rating = base.with_entities(func.avg(models.Movie.rating)).scalar()
 
     top_rewatch = (
-        db.query(models.Movie)
-        .filter(models.Movie.rewatch_count > 0)
+        base.filter(models.Movie.rewatch_count > 0)
         .order_by(models.Movie.rewatch_count.desc())
         .first()
     )
 
     genre_breakdown = (
-        db.query(models.Movie.genre, func.count(models.Movie.id))
+        base.with_entities(models.Movie.genre, func.count(models.Movie.id))
         .group_by(models.Movie.genre)
         .all()
     )
 
     rating_distribution = (
-        db.query(
+        base.with_entities(
             func.floor(models.Movie.rating).label("rating_bucket"),
-            func.count(models.Movie.id).label("count")
+            func.count(models.Movie.id).label("count"),
         )
         .filter(models.Movie.rating != None)
         .group_by(func.floor(models.Movie.rating))
@@ -53,5 +62,5 @@ def get_stats(db: Session = Depends(get_db)):
         "rating_distribution": [
             {"rating": int(bucket), "count": count}
             for bucket, count in rating_distribution
-        ]
+        ],
     }

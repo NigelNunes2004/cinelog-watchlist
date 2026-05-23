@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ToptenRouteImport } from './routes/topten'
 import { Route as StatsRouteImport } from './routes/stats'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MoviesIdRouteImport } from './routes/movies.$id'
 
@@ -22,6 +23,11 @@ const ToptenRoute = ToptenRouteImport.update({
 const StatsRoute = StatsRouteImport.update({
   id: '/stats',
   path: '/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,12 +43,14 @@ const MoviesIdRoute = MoviesIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/stats': typeof StatsRoute
   '/topten': typeof ToptenRoute
   '/movies/$id': typeof MoviesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/stats': typeof StatsRoute
   '/topten': typeof ToptenRoute
   '/movies/$id': typeof MoviesIdRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/stats': typeof StatsRoute
   '/topten': typeof ToptenRoute
   '/movies/$id': typeof MoviesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/stats' | '/topten' | '/movies/$id'
+  fullPaths: '/' | '/auth' | '/stats' | '/topten' | '/movies/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/stats' | '/topten' | '/movies/$id'
-  id: '__root__' | '/' | '/stats' | '/topten' | '/movies/$id'
+  to: '/' | '/auth' | '/stats' | '/topten' | '/movies/$id'
+  id: '__root__' | '/' | '/auth' | '/stats' | '/topten' | '/movies/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   StatsRoute: typeof StatsRoute
   ToptenRoute: typeof ToptenRoute
   MoviesIdRoute: typeof MoviesIdRoute
@@ -85,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StatsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   StatsRoute: StatsRoute,
   ToptenRoute: ToptenRoute,
   MoviesIdRoute: MoviesIdRoute,
