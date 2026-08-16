@@ -77,7 +77,7 @@ function MovieDetailPage() {
 
           <FadeItem>
             <div className="mb-3 flex items-center gap-3">
-              <span className="h-px w-8 bg-primary" />
+              <span className="h-px w-8 grad-amber" />
               <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
                 {movie.genre} · {movie.release_year}
               </p>
@@ -109,7 +109,7 @@ function MovieDetailPage() {
                 className={`inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition ${
                   movie.is_top_ten
                     ? "border border-border bg-card hover:border-destructive/40 hover:text-destructive"
-                    : "bg-primary text-primary-foreground hover:brightness-105"
+                    : "btn-amber"
                 }`}
               >
                 <Crown className="h-4 w-4" />
@@ -134,7 +134,7 @@ function MovieDetailPage() {
             {movie.review && (
               <div className="mt-8">
                 <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                  <span className="h-3 w-1 rounded-full bg-primary" />
+                  <span className="h-3 w-1 rounded-full grad-amber" />
                   My review
                 </h2>
                 <p className="whitespace-pre-line text-[15px] leading-relaxed text-foreground/90">

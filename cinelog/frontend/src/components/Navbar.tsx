@@ -23,14 +23,14 @@ export function Navbar() {
     <header className="sticky top-0 z-40 border-b border-border/80 bg-background/75 backdrop-blur-xl">
       <div className="mx-auto flex h-[3.75rem] max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link to="/" className="flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/12 ring-1 ring-primary/20">
+          <span className="icon-amber flex h-8 w-8 items-center justify-center rounded-md">
             <Film className="h-4 w-4 text-primary" />
           </span>
           <span
             className="text-lg font-semibold tracking-tight"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Cine<span className="text-primary">Log</span>
+            Cine<span className="text-grad-amber">Log</span>
           </span>
         </Link>
 
@@ -49,7 +49,7 @@ export function Navbar() {
                 {active && (
                   <motion.span
                     layoutId="nav-underline"
-                    className="absolute inset-x-3 -bottom-[calc(0.5rem+1px)] h-0.5 rounded-full bg-primary/80"
+                    className="absolute inset-x-3 -bottom-[calc(0.5rem+1px)] h-0.5 rounded-full grad-amber"
                     transition={{ type: "spring", stiffness: 420, damping: 34 }}
                   />
                 )}

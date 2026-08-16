@@ -1,9 +1,12 @@
 import type { MovieStatus } from "@/store/MoviesContext";
 
+/* Same amber family — intensity steps only, no other hues */
 const styles: Record<MovieStatus, string> = {
   unwatched: "bg-muted text-muted-foreground border-border",
-  watching: "bg-primary/10 text-primary border-primary/25",
-  watched: "bg-secondary text-foreground/80 border-border",
+  watching:
+    "border-primary/30 text-primary bg-gradient-to-b from-primary/18 to-primary/8",
+  watched:
+    "border-primary/40 text-primary bg-gradient-to-b from-primary/28 to-primary/12",
 };
 
 const labels: Record<MovieStatus, string> = {

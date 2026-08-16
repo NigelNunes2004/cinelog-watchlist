@@ -69,7 +69,7 @@ function TopTenPage() {
                   transition={{ delay: i * 0.04, duration: 0.4 }}
                   className={`flex items-stretch gap-4 overflow-hidden rounded-xl border transition-colors sm:gap-5 ${
                     isOne
-                      ? "border-primary/35 bg-gradient-to-r from-primary/10 via-card to-transparent p-5"
+                      ? "border-primary/35 bg-gradient-to-r from-primary/18 via-primary/6 to-transparent p-5"
                       : "surface p-4 hover:border-primary/30"
                   }`}
                 >
@@ -204,7 +204,7 @@ function AssignForm({
       <button
         type="submit"
         disabled={!movieId || !rank}
-        className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
+        className="btn-amber rounded-md px-4 py-2 text-sm font-semibold disabled:opacity-40"
       >
         Assign
       </button>

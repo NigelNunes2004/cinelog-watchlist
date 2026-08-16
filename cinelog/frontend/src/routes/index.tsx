@@ -65,7 +65,7 @@ function WatchlistPage() {
             action={
               <button
                 onClick={() => setAdding(true)}
-                className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:brightness-105"
+                className="btn-amber inline-flex items-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold"
               >
                 <Plus className="h-4 w-4" /> Add Movie
               </button>

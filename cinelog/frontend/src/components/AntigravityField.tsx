@@ -8,7 +8,7 @@ type Particle = {
   vx: number;
   vy: number;
   r: number;
-  warm: boolean;
+  depth: number; // 0 bright amber → 1 deep amber
   alpha: number;
 };
 
@@ -29,6 +29,14 @@ export function AntigravityField() {
     let h = 0;
     let dpr = 1;
 
+    const tone = (depth: number) => {
+      // Self-gradient palette within amber only
+      const r = Math.round(255 - depth * 55);
+      const g = Math.round(220 - depth * 70);
+      const b = Math.round(130 - depth * 40);
+      return `${r}, ${g}, ${b}`;
+    };
+
     const resize = () => {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       w = window.innerWidth;
@@ -39,7 +47,7 @@ export function AntigravityField() {
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.min(80, Math.floor((w * h) / 18000));
+      const count = Math.min(88, Math.floor((w * h) / 16500));
       particles = Array.from({ length: count }, () => {
         const x = Math.random() * w;
         const y = Math.random() * h;
@@ -48,11 +56,11 @@ export function AntigravityField() {
           y,
           ox: x,
           oy: y,
-          vx: (Math.random() - 0.5) * 0.1,
-          vy: (Math.random() - 0.5) * 0.1,
-          r: 0.6 + Math.random() * 1.6,
-          warm: Math.random() > 0.55,
-          alpha: 0.15 + Math.random() * 0.35,
+          vx: (Math.random() - 0.5) * 0.11,
+          vy: (Math.random() - 0.5) * 0.11,
+          r: 0.65 + Math.random() * 1.7,
+          depth: Math.random(),
+          alpha: 0.18 + Math.random() * 0.4,
         };
       });
     };
@@ -79,18 +87,18 @@ export function AntigravityField() {
       const sy = smooth.current.y;
 
       if (active || sx > 0) {
-        const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, Math.min(w, h) * 0.36);
-        g.addColorStop(0, "rgba(210, 175, 90, 0.055)");
-        g.addColorStop(0.5, "rgba(180, 160, 120, 0.025)");
+        const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, Math.min(w, h) * 0.38);
+        g.addColorStop(0, "rgba(232, 196, 100, 0.07)");
+        g.addColorStop(0.45, "rgba(180, 140, 60, 0.035)");
         g.addColorStop(1, "rgba(0,0,0,0)");
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, w, h);
       }
 
       ctx.save();
-      ctx.strokeStyle = "rgba(255,245,230,0.022)";
+      ctx.strokeStyle = "rgba(255, 230, 180, 0.025)";
       ctx.lineWidth = 1;
-      const gap = 76;
+      const gap = 72;
       for (let x = 0; x < w; x += gap) {
         ctx.beginPath();
         for (let y = 0; y <= h; y += 10) {
@@ -98,9 +106,9 @@ export function AntigravityField() {
           let dy = 0;
           if (active) {
             const dist = Math.hypot(x - mx, y - my);
-            const force = Math.max(0, 1 - dist / 250);
-            dx = (x - mx) * force * 0.08;
-            dy = (y - my) * force * 0.08;
+            const force = Math.max(0, 1 - dist / 255);
+            dx = (x - mx) * force * 0.09;
+            dy = (y - my) * force * 0.09;
           }
           if (y === 0) ctx.moveTo(x + dx, y + dy);
           else ctx.lineTo(x + dx, y + dy);
@@ -114,9 +122,9 @@ export function AntigravityField() {
           let dy = 0;
           if (active) {
             const dist = Math.hypot(x - mx, y - my);
-            const force = Math.max(0, 1 - dist / 250);
-            dx = (x - mx) * force * 0.08;
-            dy = (y - my) * force * 0.08;
+            const force = Math.max(0, 1 - dist / 255);
+            dx = (x - mx) * force * 0.09;
+            dy = (y - my) * force * 0.09;
           }
           if (x === 0) ctx.moveTo(x + dx, y + dy);
           else ctx.lineTo(x + dx, y + dy);
@@ -135,8 +143,8 @@ export function AntigravityField() {
           const dx = p.x - mx;
           const dy = p.y - my;
           const dist = Math.hypot(dx, dy) || 1;
-          const influence = Math.max(0, 1 - dist / 200);
-          const mag = influence > 0.55 ? -0.42 : 0.14;
+          const influence = Math.max(0, 1 - dist / 205);
+          const mag = influence > 0.55 ? -0.45 : 0.15;
           p.vx += (dx / dist) * mag * influence;
           p.vy += (dy / dist) * mag * influence;
         }
@@ -156,15 +164,13 @@ export function AntigravityField() {
         for (let j = i + 1; j < particles.length; j++) {
           const b = particles[j];
           const d = Math.hypot(a.x - b.x, a.y - b.y);
-          if (d > 105) continue;
+          if (d > 108) continue;
           const midDist = active
             ? Math.hypot((a.x + b.x) / 2 - mx, (a.y + b.y) / 2 - my)
             : 9999;
-          const boost = midDist < 170 ? 0.2 : 0.045;
-          const alpha = (1 - d / 105) * boost;
-          ctx.strokeStyle = a.warm
-            ? `rgba(210, 175, 90, ${alpha})`
-            : `rgba(200, 195, 185, ${alpha})`;
+          const boost = midDist < 175 ? 0.24 : 0.05;
+          const alpha = (1 - d / 108) * boost;
+          ctx.strokeStyle = `rgba(${tone(a.depth)}, ${alpha})`;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
@@ -173,22 +179,21 @@ export function AntigravityField() {
       }
 
       for (const p of particles) {
-        const near = active ? Math.max(0, 1 - Math.hypot(p.x - mx, p.y - my) / 180) : 0;
-        const glow = p.r + near * 2;
-        const core = p.warm ? "230, 200, 130" : "210, 205, 195";
-        const mid = p.warm ? "190, 160, 80" : "160, 155, 145";
-        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glow * 3.2);
-        grad.addColorStop(0, `rgba(${core}, ${0.35 + near * 0.25})`);
-        grad.addColorStop(0.45, `rgba(${mid}, ${0.08 + near * 0.1})`);
-        grad.addColorStop(1, `rgba(${mid}, 0)`);
+        const near = active ? Math.max(0, 1 - Math.hypot(p.x - mx, p.y - my) / 185) : 0;
+        const glow = p.r + near * 2.2;
+        const c = tone(p.depth);
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glow * 3.4);
+        grad.addColorStop(0, `rgba(${c}, ${0.42 + near * 0.3})`);
+        grad.addColorStop(0.45, `rgba(${c}, ${0.1 + near * 0.12})`);
+        grad.addColorStop(1, `rgba(${c}, 0)`);
         ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, glow * 3.2, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, glow * 3.4, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.beginPath();
-        ctx.fillStyle = `rgba(${core}, ${p.alpha + near * 0.25})`;
-        ctx.arc(p.x, p.y, glow * 0.35, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${c}, ${p.alpha + near * 0.3})`;
+        ctx.arc(p.x, p.y, glow * 0.38, 0, Math.PI * 2);
         ctx.fill();
       }
 
@@ -211,9 +216,9 @@ export function AntigravityField() {
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_0%,oklch(0.28_0.04_82_/_0.14),transparent_45%),radial-gradient(ellipse_at_80%_100%,oklch(0.22_0.02_55_/_0.2),transparent_50%),linear-gradient(180deg,oklch(0.12_0.012_55),oklch(0.1_0.01_50))]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_18%_0%,oklch(0.35_0.07_82_/_0.18),transparent_48%),radial-gradient(ellipse_at_85%_95%,oklch(0.28_0.05_70_/_0.16),transparent_50%),linear-gradient(180deg,oklch(0.125_0.016_60),oklch(0.1_0.014_55))]" />
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
-      <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/85" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/35 via-transparent to-background/80" />
     </div>
   );
 }

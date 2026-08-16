@@ -33,14 +33,14 @@ export const Route = createFileRoute("/stats")({
 });
 
 const GENRE_COLORS = [
-  "oklch(0.78 0.1 82)",
-  "oklch(0.62 0.03 70)",
-  "oklch(0.55 0.02 55)",
-  "oklch(0.7 0.05 90)",
-  "oklch(0.5 0.02 240)",
-  "oklch(0.68 0.04 80)",
-  "oklch(0.58 0.02 60)",
-  "oklch(0.52 0.02 50)",
+  "oklch(0.88 0.11 85)",
+  "oklch(0.8 0.125 82)",
+  "oklch(0.72 0.115 78)",
+  "oklch(0.64 0.1 75)",
+  "oklch(0.56 0.085 72)",
+  "oklch(0.48 0.07 68)",
+  "oklch(0.42 0.055 65)",
+  "oklch(0.36 0.04 62)",
 ];
 
 function StatsPage() {
@@ -72,26 +72,26 @@ function StatsPage() {
       icon: <Film className="h-4 w-4" />,
       label: "Total Movies",
       value: String(movies.length),
-      tone: "amber" as const,
+      intensity: "high" as const,
     },
     {
       icon: <Eye className="h-4 w-4" />,
       label: "Watched",
       value: String(stats.watched.length),
-      tone: "teal" as const,
+      intensity: "mid" as const,
     },
     {
       icon: <Star className="h-4 w-4" />,
       label: "Avg Rating",
       value: stats.avg ? stats.avg.toFixed(1) : "—",
-      tone: "rose" as const,
+      intensity: "high" as const,
     },
     {
       icon: <RotateCcw className="h-4 w-4" />,
       label: "Most Rewatched",
       value: stats.mostRewatched ? stats.mostRewatched.title : "—",
       sub: stats.mostRewatched ? `${stats.mostRewatched.rewatch_count}×` : undefined,
-      tone: "steel" as const,
+      intensity: "low" as const,
     },
   ];
 
@@ -117,27 +117,27 @@ function StatsPage() {
 
         <div className="mb-8 grid gap-4 lg:grid-cols-2">
           <FadeItem>
-            <ChartCard title="Rating distribution" accent="rose">
+            <ChartCard title="Rating distribution">
               <ResponsiveContainer width="100%" height={280}>
                 <BarChart data={stats.ratingDist}>
-                  <XAxis dataKey="rating" stroke="oklch(0.55 0.02 60)" fontSize={12} />
-                  <YAxis allowDecimals={false} stroke="oklch(0.55 0.02 60)" fontSize={12} />
+                  <XAxis dataKey="rating" stroke="oklch(0.55 0.02 70)" fontSize={12} />
+                  <YAxis allowDecimals={false} stroke="oklch(0.55 0.02 70)" fontSize={12} />
                   <Tooltip
                     contentStyle={{
-                      background: "oklch(0.17 0.02 50)",
-                      border: "1px solid oklch(0.35 0.02 55)",
+                      background: "oklch(0.17 0.018 60)",
+                      border: "1px solid oklch(0.35 0.025 70)",
                       borderRadius: 8,
                     }}
-                    cursor={{ fill: "oklch(0.25 0.02 55 / 0.4)" }}
+                    cursor={{ fill: "oklch(0.8 0.125 82 / 0.08)" }}
                   />
-                  <Bar dataKey="count" fill="oklch(0.55 0.02 55)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="count" fill="oklch(0.8 0.125 82)" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </ChartCard>
           </FadeItem>
 
           <FadeItem>
-            <ChartCard title="Genre breakdown" accent="teal">
+            <ChartCard title="Genre breakdown">
               <ResponsiveContainer width="100%" height={280}>
                 <PieChart>
                   <Pie
@@ -152,15 +152,15 @@ function StatsPage() {
                       <Cell
                         key={i}
                         fill={GENRE_COLORS[i % GENRE_COLORS.length]}
-                        stroke="oklch(0.13 0.018 55)"
+                        stroke="oklch(0.13 0.016 60)"
                         strokeWidth={2}
                       />
                     ))}
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      background: "oklch(0.17 0.02 50)",
-                      border: "1px solid oklch(0.35 0.02 55)",
+                      background: "oklch(0.17 0.018 60)",
+                      border: "1px solid oklch(0.35 0.025 70)",
                       borderRadius: 8,
                     }}
                   />
@@ -172,7 +172,7 @@ function StatsPage() {
         </div>
 
         <FadeItem>
-          <ChartCard title="Top 5 rated" accent="amber">
+          <ChartCard title="Top 5 rated">
             {stats.top5.length === 0 ? (
               <p className="text-sm text-muted-foreground">Rate some movies to see your top 5.</p>
             ) : (
@@ -231,25 +231,24 @@ function StatCard({
   label,
   value,
   sub,
-  tone,
+  intensity,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string;
   sub?: string;
-  tone: "amber" | "teal" | "rose" | "steel";
+  intensity: "high" | "mid" | "low";
 }) {
   const tones = {
-    amber: "text-primary bg-primary/10 ring-primary/20",
-    teal: "text-muted-foreground bg-muted ring-border",
-    rose: "text-primary bg-primary/10 ring-primary/20",
-    steel: "text-muted-foreground bg-muted ring-border",
+    high: "text-primary icon-amber",
+    mid: "text-primary bg-gradient-to-b from-primary/20 to-primary/8 ring-1 ring-primary/25",
+    low: "text-primary/80 bg-gradient-to-b from-primary/12 to-primary/5 ring-1 ring-primary/15",
   };
 
   return (
     <div className="surface rounded-xl p-4 sm:p-5">
       <div className="flex items-center gap-2.5">
-        <span className={`rounded-md p-1.5 ring-1 ${tones[tone]}`}>{icon}</span>
+        <span className={`rounded-md p-1.5 ${tones[intensity]}`}>{icon}</span>
         <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
           {label}
         </span>
@@ -265,24 +264,11 @@ function StatCard({
   );
 }
 
-function ChartCard({
-  title,
-  accent,
-  children,
-}: {
-  title: string;
-  accent: "amber" | "teal" | "rose";
-  children: React.ReactNode;
-}) {
-  const bar = {
-    amber: "bg-primary",
-    teal: "bg-primary/50",
-    rose: "bg-primary/70",
-  };
+function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="surface rounded-xl p-5">
       <div className="mb-4 flex items-center gap-2.5">
-        <span className={`h-3 w-1 rounded-full ${bar[accent]}`} />
+        <span className="h-3 w-1 rounded-full grad-amber" />
         <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           {title}
         </h2>

@@ -74,7 +74,7 @@ function AuthPage() {
           className="hidden lg:block"
         >
           <div className="mb-5 flex items-center gap-3">
-            <span className="h-px w-10 bg-primary" />
+            <span className="h-px w-10 grad-amber" />
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
               Private cinema
             </p>
@@ -82,7 +82,7 @@ function AuthPage() {
           <h1 className="text-5xl font-medium leading-[1.05] xl:text-6xl">
             Every film,
             <br />
-            <span className="italic text-primary/90">your story.</span>
+            <span className="text-grad-amber italic">your story.</span>
           </h1>
           <p className="mt-5 max-w-md text-[15px] leading-relaxed text-muted-foreground">
             Rate, revisit, and rank the movies that stay with you — in a space built for
@@ -103,12 +103,12 @@ function AuthPage() {
         >
           <div className="surface-raised rounded-2xl p-7 sm:p-8">
             <div className="mb-6 flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/15 to-primary/5 ring-1 ring-border">
+              <span className="icon-amber flex h-10 w-10 items-center justify-center rounded-lg">
                 <Film className="h-5 w-5 text-primary" />
               </span>
               <div>
                 <p className="font-semibold" style={{ fontFamily: "var(--font-display)" }}>
-                  Cine<span className="text-primary">Log</span>
+                  Cine<span className="text-grad-amber">Log</span>
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {mode === "login" ? "Welcome back" : "Create your account"}
@@ -204,7 +204,7 @@ function AuthPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition hover:brightness-105 disabled:opacity-60"
+                className="btn-amber mt-1 flex w-full items-center justify-center gap-2 rounded-md py-2.5 text-sm font-semibold disabled:opacity-60"
               >
                 {submitting ? (
                   <>
