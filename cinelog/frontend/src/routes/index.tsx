@@ -77,11 +77,11 @@ function WatchlistPage() {
             </span>
             <span className="text-border">|</span>
             <span>
-              <strong className="font-semibold text-rose">{watched}</strong> watched
+              <strong className="font-semibold text-foreground">{watched}</strong> watched
             </span>
             <span className="text-border">|</span>
             <span>
-              <strong className="font-semibold text-teal">{watching}</strong> in progress
+              <strong className="font-semibold text-foreground">{watching}</strong> in progress
             </span>
           </div>
         </FadeItem>

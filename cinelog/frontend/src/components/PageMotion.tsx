@@ -66,8 +66,8 @@ export function PageHeader({
     <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
       <div className="max-w-2xl">
         <div className="mb-3 flex items-center gap-3">
-          <span className="h-px w-8 bg-teal" />
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-teal">
+          <span className="h-px w-8 bg-primary/50" />
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary/80">
             {eyebrow}
           </p>
         </div>
@@ -76,7 +76,7 @@ export function PageHeader({
           {accent ? (
             <>
               {" "}
-              <span className="text-gradient-cinema italic">{accent}</span>
+              <span className="italic text-primary/90">{accent}</span>
             </>
           ) : null}
         </h1>

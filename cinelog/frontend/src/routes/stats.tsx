@@ -33,14 +33,14 @@ export const Route = createFileRoute("/stats")({
 });
 
 const GENRE_COLORS = [
-  "oklch(0.82 0.14 82)",
-  "oklch(0.72 0.11 195)",
-  "oklch(0.72 0.14 25)",
-  "oklch(0.68 0.1 145)",
-  "oklch(0.62 0.06 240)",
-  "oklch(0.75 0.12 55)",
-  "oklch(0.7 0.1 220)",
-  "oklch(0.68 0.12 10)",
+  "oklch(0.78 0.1 82)",
+  "oklch(0.62 0.03 70)",
+  "oklch(0.55 0.02 55)",
+  "oklch(0.7 0.05 90)",
+  "oklch(0.5 0.02 240)",
+  "oklch(0.68 0.04 80)",
+  "oklch(0.58 0.02 60)",
+  "oklch(0.52 0.02 50)",
 ];
 
 function StatsPage() {
@@ -130,7 +130,7 @@ function StatsPage() {
                     }}
                     cursor={{ fill: "oklch(0.25 0.02 55 / 0.4)" }}
                   />
-                  <Bar dataKey="count" fill="oklch(0.72 0.14 25)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="count" fill="oklch(0.55 0.02 55)" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </ChartCard>
@@ -186,7 +186,7 @@ function StatsPage() {
                     className="flex items-center gap-4 rounded-lg p-2 transition-colors hover:bg-muted/50"
                   >
                     <span
-                      className="w-7 text-center text-2xl font-semibold text-steel/50"
+                      className="w-7 text-center text-2xl font-semibold text-muted-foreground/40"
                       style={{ fontFamily: "var(--font-display)" }}
                     >
                       {i + 1}
@@ -206,7 +206,7 @@ function StatsPage() {
                       <Link
                         to="/movies/$id"
                         params={{ id: m.id }}
-                        className="block truncate text-sm font-semibold hover:text-teal"
+                        className="block truncate text-sm font-semibold hover:text-primary"
                       >
                         {m.title}
                       </Link>
@@ -214,7 +214,7 @@ function StatsPage() {
                         {m.genre} · {m.release_year}
                       </p>
                     </div>
-                    <span className="text-sm font-bold text-rose">★ {m.rating!.toFixed(1)}</span>
+                    <span className="text-sm font-bold text-primary">★ {m.rating!.toFixed(1)}</span>
                   </motion.li>
                 ))}
               </ol>
@@ -241,9 +241,9 @@ function StatCard({
 }) {
   const tones = {
     amber: "text-primary bg-primary/10 ring-primary/20",
-    teal: "text-teal bg-teal/10 ring-teal/20",
-    rose: "text-rose bg-rose/10 ring-rose/20",
-    steel: "text-steel bg-steel/10 ring-steel/20",
+    teal: "text-muted-foreground bg-muted ring-border",
+    rose: "text-primary bg-primary/10 ring-primary/20",
+    steel: "text-muted-foreground bg-muted ring-border",
   };
 
   return (
@@ -260,7 +260,7 @@ function StatCard({
       >
         {value}
       </div>
-      {sub && <div className="mt-1 text-xs font-medium text-teal">{sub}</div>}
+      {sub && <div className="mt-1 text-xs font-medium text-primary">{sub}</div>}
     </div>
   );
 }
@@ -276,8 +276,8 @@ function ChartCard({
 }) {
   const bar = {
     amber: "bg-primary",
-    teal: "bg-teal",
-    rose: "bg-rose",
+    teal: "bg-primary/50",
+    rose: "bg-primary/70",
   };
   return (
     <div className="surface rounded-xl p-5">

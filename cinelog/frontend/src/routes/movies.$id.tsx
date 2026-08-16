@@ -29,7 +29,7 @@ function MovieDetailPage() {
       <Layout>
         <div className="py-20 text-center">
           <h1 className="text-2xl font-semibold">Movie not found</h1>
-          <Link to="/" className="mt-4 inline-block text-teal">
+          <Link to="/" className="mt-4 inline-block text-primary">
             Back to watchlist
           </Link>
         </div>
@@ -43,7 +43,7 @@ function MovieDetailPage() {
         <FadeItem>
           <Link
             to="/"
-            className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-teal"
+            className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-primary"
           >
             <ArrowLeft className="h-4 w-4" /> Back to Watchlist
           </Link>
@@ -77,8 +77,8 @@ function MovieDetailPage() {
 
           <FadeItem>
             <div className="mb-3 flex items-center gap-3">
-              <span className="h-px w-8 bg-teal" />
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-teal">
+              <span className="h-px w-8 bg-primary" />
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
                 {movie.genre} · {movie.release_year}
               </p>
             </div>
@@ -87,7 +87,7 @@ function MovieDetailPage() {
             <div className="mt-5 flex flex-wrap items-center gap-3">
               <StatusBadge status={movie.status} />
               {movie.status === "watched" && movie.rating != null && (
-                <span className="flex items-center gap-1.5 text-lg font-semibold text-rose">
+                <span className="flex items-center gap-1.5 text-lg font-semibold text-primary">
                   <Star className="h-5 w-5 fill-current" /> {movie.rating.toFixed(1)}
                   <span className="text-sm font-normal text-muted-foreground">/ 10</span>
                 </span>
@@ -100,7 +100,7 @@ function MovieDetailPage() {
             <div className="mt-8 flex flex-wrap gap-2">
               <button
                 onClick={() => incrementRewatch(movie.id)}
-                className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-sm font-medium transition hover:border-teal/40 hover:text-teal"
+                className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-sm font-medium transition hover:border-primary/40 hover:text-primary"
               >
                 <RotateCcw className="h-4 w-4" /> + Rewatch
               </button>
@@ -134,7 +134,7 @@ function MovieDetailPage() {
             {movie.review && (
               <div className="mt-8">
                 <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                  <span className="h-3 w-1 rounded-full bg-teal" />
+                  <span className="h-3 w-1 rounded-full bg-primary" />
                   My review
                 </h2>
                 <p className="whitespace-pre-line text-[15px] leading-relaxed text-foreground/90">

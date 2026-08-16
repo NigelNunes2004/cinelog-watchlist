@@ -1,9 +1,9 @@
 import type { MovieStatus } from "@/store/MoviesContext";
 
 const styles: Record<MovieStatus, string> = {
-  unwatched: "bg-steel/15 text-steel border-steel/30",
-  watching: "bg-teal/15 text-teal border-teal/35",
-  watched: "bg-rose/15 text-rose border-rose/35",
+  unwatched: "bg-muted text-muted-foreground border-border",
+  watching: "bg-primary/10 text-primary border-primary/25",
+  watched: "bg-secondary text-foreground/80 border-border",
 };
 
 const labels: Record<MovieStatus, string> = {

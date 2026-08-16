@@ -69,13 +69,13 @@ function TopTenPage() {
                   transition={{ delay: i * 0.04, duration: 0.4 }}
                   className={`flex items-stretch gap-4 overflow-hidden rounded-xl border transition-colors sm:gap-5 ${
                     isOne
-                      ? "border-primary/35 bg-gradient-to-r from-primary/10 via-card to-teal/5 p-5"
-                      : "surface p-4 hover:border-teal/30"
+                      ? "border-primary/35 bg-gradient-to-r from-primary/10 via-card to-transparent p-5"
+                      : "surface p-4 hover:border-primary/30"
                   }`}
                 >
                   <div
                     className={`flex shrink-0 items-center justify-center font-semibold ${
-                      isOne ? "w-16 text-5xl text-primary sm:w-20 sm:text-6xl" : "w-12 text-4xl text-steel/70"
+                      isOne ? "w-16 text-5xl text-primary sm:w-20 sm:text-6xl" : "w-12 text-4xl text-muted-foreground/50"
                     }`}
                     style={{ fontFamily: "var(--font-display)" }}
                   >
@@ -115,16 +115,16 @@ function TopTenPage() {
                       <Link
                         to="/movies/$id"
                         params={{ id: m.id }}
-                        className="hover:text-teal"
+                        className="hover:text-primary"
                       >
                         {m.title}
                       </Link>
                     </h3>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      <span className="text-teal">{m.genre}</span> · {m.release_year}
+                      <span className="text-primary">{m.genre}</span> · {m.release_year}
                     </p>
                     {m.rating != null && (
-                      <p className="mt-1 text-sm font-semibold text-rose">★ {m.rating.toFixed(1)}</p>
+                      <p className="mt-1 text-sm font-semibold text-primary">★ {m.rating.toFixed(1)}</p>
                     )}
                     {isOne && m.favourite_quote && (
                       <p className="mt-3 line-clamp-2 text-sm italic text-muted-foreground">
@@ -204,7 +204,7 @@ function AssignForm({
       <button
         type="submit"
         disabled={!movieId || !rank}
-        className="rounded-md bg-teal px-4 py-2 text-sm font-semibold text-accent-foreground disabled:opacity-40"
+        className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
       >
         Assign
       </button>

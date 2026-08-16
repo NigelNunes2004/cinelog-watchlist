@@ -32,7 +32,7 @@ function AuthPage() {
     return (
       <div className="relative flex min-h-screen items-center justify-center">
         <AntigravityField />
-        <Loader2 className="relative z-10 h-7 w-7 animate-spin text-teal" />
+        <Loader2 className="relative z-10 h-7 w-7 animate-spin text-primary" />
       </div>
     );
   }
@@ -74,24 +74,24 @@ function AuthPage() {
           className="hidden lg:block"
         >
           <div className="mb-5 flex items-center gap-3">
-            <span className="h-px w-10 bg-teal" />
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-teal">
+            <span className="h-px w-10 bg-primary" />
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
               Private cinema
             </p>
           </div>
           <h1 className="text-5xl font-medium leading-[1.05] xl:text-6xl">
             Every film,
             <br />
-            <span className="text-gradient-cinema italic">your story.</span>
+            <span className="italic text-primary/90">your story.</span>
           </h1>
           <p className="mt-5 max-w-md text-[15px] leading-relaxed text-muted-foreground">
             Rate, revisit, and rank the movies that stay with you — in a space built for
             collectors, not checklists.
           </p>
           <div className="mt-10 grid grid-cols-3 gap-6 border-t border-border pt-8">
-            <Meta label="Amber" value="Brand" />
-            <Meta label="Teal" value="Focus" />
-            <Meta label="Rose" value="Ratings" />
+            <Meta label="Private" value="Per account" />
+            <Meta label="Refresh" value="20 days" />
+            <Meta label="Sync" value="Real-time" />
           </div>
         </motion.div>
 
@@ -103,12 +103,12 @@ function AuthPage() {
         >
           <div className="surface-raised rounded-2xl p-7 sm:p-8">
             <div className="mb-6 flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-teal/15 ring-1 ring-border">
+              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/15 to-primary/5 ring-1 ring-border">
                 <Film className="h-5 w-5 text-primary" />
               </span>
               <div>
                 <p className="font-semibold" style={{ fontFamily: "var(--font-display)" }}>
-                  Cine<span className="text-teal">Log</span>
+                  Cine<span className="text-primary">Log</span>
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {mode === "login" ? "Welcome back" : "Create your account"}
@@ -261,4 +261,4 @@ function Field({
 }
 
 const inputCls =
-  "w-full rounded-md border border-border bg-card py-2.5 pl-9 pr-3 text-sm transition focus:outline-none focus:ring-2 focus:ring-teal/40";
+  "w-full rounded-md border border-border bg-card py-2.5 pl-9 pr-3 text-sm transition focus:outline-none focus:ring-2 focus:ring-primary/30";

@@ -20,7 +20,7 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
         <AntigravityField />
         <div className="relative z-10 flex flex-col items-center">
           <Film className="mb-4 h-8 w-8 text-primary/70" />
-          <Loader2 className="h-7 w-7 animate-spin text-teal" />
+          <Loader2 className="h-7 w-7 animate-spin text-primary" />
           <p className="mt-4 text-sm text-muted-foreground">Loading your cinema…</p>
         </div>
       </div>

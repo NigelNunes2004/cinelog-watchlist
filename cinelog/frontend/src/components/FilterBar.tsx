@@ -28,12 +28,12 @@ export function FilterBar({
   onClear: () => void;
 }) {
   const sel =
-    "bg-card border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal/35 transition";
+    "bg-card border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 transition";
 
   return (
     <div className="surface flex flex-wrap items-end gap-3 rounded-xl p-4">
       <div className="rule-cinema mb-1 w-full" />
-      <Group label="Genre" tone="teal">
+      <Group label="Genre">
         <select
           className={sel}
           value={filters.genre}
@@ -47,7 +47,7 @@ export function FilterBar({
           ))}
         </select>
       </Group>
-      <Group label="Status" tone="rose">
+      <Group label="Status">
         <select
           className={sel}
           value={filters.status}
@@ -59,7 +59,7 @@ export function FilterBar({
           <option value="watched">Watched</option>
         </select>
       </Group>
-      <Group label="Sort by" tone="amber">
+      <Group label="Sort by">
         <select
           className={sel}
           value={filters.sortBy}
@@ -73,7 +73,7 @@ export function FilterBar({
           <option value="release_year">Release year</option>
         </select>
       </Group>
-      <Group label="Order" tone="steel">
+      <Group label="Order">
         <select
           className={sel}
           value={filters.order}
@@ -87,7 +87,7 @@ export function FilterBar({
       </Group>
       <button
         onClick={onClear}
-        className="ml-auto rounded-md px-3 py-2 text-sm text-muted-foreground transition hover:bg-secondary/50 hover:text-teal"
+        className="ml-auto rounded-md px-3 py-2 text-sm text-muted-foreground transition hover:bg-secondary hover:text-foreground"
       >
         Reset
       </button>
@@ -95,24 +95,10 @@ export function FilterBar({
   );
 }
 
-function Group({
-  label,
-  tone,
-  children,
-}: {
-  label: string;
-  tone: "teal" | "rose" | "amber" | "steel";
-  children: React.ReactNode;
-}) {
-  const colors = {
-    teal: "text-teal",
-    rose: "text-rose",
-    amber: "text-primary",
-    steel: "text-steel",
-  };
+function Group({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <span className={`text-[10px] font-semibold uppercase tracking-[0.14em] ${colors[tone]}`}>
+      <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
         {label}
       </span>
       {children}

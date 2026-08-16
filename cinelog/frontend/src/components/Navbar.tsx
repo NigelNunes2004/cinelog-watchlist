@@ -23,14 +23,14 @@ export function Navbar() {
     <header className="sticky top-0 z-40 border-b border-border/80 bg-background/75 backdrop-blur-xl">
       <div className="mx-auto flex h-[3.75rem] max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link to="/" className="flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-primary/25 to-teal/20 ring-1 ring-primary/25">
+          <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary/12 ring-1 ring-primary/20">
             <Film className="h-4 w-4 text-primary" />
           </span>
           <span
             className="text-lg font-semibold tracking-tight"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Cine<span className="text-teal">Log</span>
+            Cine<span className="text-primary">Log</span>
           </span>
         </Link>
 
@@ -49,7 +49,7 @@ export function Navbar() {
                 {active && (
                   <motion.span
                     layoutId="nav-underline"
-                    className="absolute inset-x-3 -bottom-[calc(0.5rem+1px)] h-0.5 rounded-full bg-gradient-to-r from-primary via-teal to-rose"
+                    className="absolute inset-x-3 -bottom-[calc(0.5rem+1px)] h-0.5 rounded-full bg-primary/80"
                     transition={{ type: "spring", stiffness: 420, damping: 34 }}
                   />
                 )}
@@ -64,7 +64,7 @@ export function Navbar() {
               </span>
               <button
                 onClick={handleLogout}
-                className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-foreground"
+                className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
                 title="Sign out"
               >
                 <LogOut className="h-3.5 w-3.5" />

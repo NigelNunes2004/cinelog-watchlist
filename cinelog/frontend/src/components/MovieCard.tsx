@@ -26,7 +26,7 @@ export function MovieCard({ movie }: { movie: Movie }) {
         <Link
           to="/movies/$id"
           params={{ id: movie.id }}
-          className="surface relative block overflow-hidden rounded-xl transition-[border-color,box-shadow] duration-300 hover:border-teal/35 hover:shadow-[0_20px_36px_-24px_oklch(0.35_0.06_195_/_0.55)]"
+          className="surface relative block overflow-hidden rounded-xl transition-[border-color,box-shadow] duration-300 hover:border-primary/30 hover:shadow-[0_16px_32px_-24px_oklch(0_0_0_/_0.6)]"
         >
           <div className="relative aspect-[2/3] overflow-hidden bg-muted">
             {movie.poster_url ? (
@@ -37,12 +37,12 @@ export function MovieCard({ movie }: { movie: Movie }) {
                 className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-muted via-secondary/40 to-card p-4 text-center text-sm text-muted-foreground">
+              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-muted to-card p-4 text-center text-sm text-muted-foreground">
                 {movie.title}
               </div>
             )}
             {movie.is_top_ten && movie.top_ten_rank && (
-              <div className="absolute top-2.5 left-2.5 flex items-center gap-1 rounded-md bg-background/85 px-2 py-1 text-[11px] font-semibold text-primary ring-1 ring-primary/30 backdrop-blur-sm">
+              <div className="absolute top-2.5 left-2.5 flex items-center gap-1 rounded-md bg-background/85 px-2 py-1 text-[11px] font-semibold text-primary ring-1 ring-primary/25 backdrop-blur-sm">
                 <Crown className="h-3 w-3 text-primary" /> #{movie.top_ten_rank}
               </div>
             )}
@@ -58,13 +58,13 @@ export function MovieCard({ movie }: { movie: Movie }) {
                 {movie.title}
               </h3>
               {movie.status === "watched" && movie.rating != null && (
-                <span className="flex shrink-0 items-center gap-0.5 text-[12px] font-semibold text-rose">
+                <span className="flex shrink-0 items-center gap-0.5 text-[12px] font-semibold text-primary">
                   <Star className="h-3 w-3 fill-current" /> {movie.rating.toFixed(1)}
                 </span>
               )}
             </div>
             <p className="text-[11px] text-muted-foreground">
-              <span className="text-teal/90">{movie.genre}</span>
+              {movie.genre}
               <span className="mx-1.5 text-border">·</span>
               {movie.release_year}
             </p>
@@ -77,7 +77,7 @@ export function MovieCard({ movie }: { movie: Movie }) {
             value={movie.status}
             onChange={(e) => updateMovie(movie.id, { status: e.target.value as MovieStatus })}
             onClick={(e) => e.stopPropagation()}
-            className="flex-1 rounded-md border border-border bg-card px-2 py-1.5 text-[11px] focus:outline-none focus:ring-2 focus:ring-teal/35"
+            className="flex-1 rounded-md border border-border bg-card px-2 py-1.5 text-[11px] focus:outline-none focus:ring-2 focus:ring-primary/30"
           >
             <option value="unwatched">Unwatched</option>
             <option value="watching">Watching</option>
@@ -89,7 +89,7 @@ export function MovieCard({ movie }: { movie: Movie }) {
               e.stopPropagation();
               setEditing(true);
             }}
-            className="rounded-md p-1.5 text-muted-foreground transition hover:bg-secondary/70 hover:text-teal"
+            className="rounded-md p-1.5 text-muted-foreground transition hover:bg-secondary hover:text-foreground"
             aria-label="Edit"
           >
             <Pencil className="h-3.5 w-3.5" />
