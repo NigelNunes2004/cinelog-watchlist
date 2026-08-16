@@ -107,21 +107,19 @@ export function MovieFormModal({
           animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
           exit={{ opacity: 0, y: 20, scale: 0.96 }}
           transition={{ type: "spring", stiffness: 320, damping: 28 }}
-          className="glass-strong flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl"
+          className="surface-raised flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex shrink-0 items-center justify-between border-b border-white/10 p-5">
+          <div className="flex shrink-0 items-center justify-between border-b border-border p-5">
             <h2 className="text-xl font-semibold">
               {isEdit ? "Edit Movie" : "Add Movie"}
             </h2>
-            <motion.button
-              whileHover={{ rotate: 90, scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+            <button
               onClick={onClose}
-              className="rounded-lg p-1.5 hover:bg-white/10"
+              className="rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
             >
               <X className="h-5 w-5" />
-            </motion.button>
+            </button>
           </div>
 
           <form onSubmit={onSubmit} className="flex min-h-0 flex-1 flex-col gap-4 p-5">
@@ -146,7 +144,7 @@ export function MovieFormModal({
                   <motion.div
                     initial={{ opacity: 0, y: -6 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-white/10 bg-[#12121f]/98 shadow-2xl backdrop-blur-xl"
+                    className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-border bg-popover shadow-xl"
                   >
                     {searchError ? (
                       <p className="px-3 py-2 text-sm text-destructive">{searchError}</p>
@@ -185,9 +183,9 @@ export function MovieFormModal({
 
             {!isEdit && (
               <div className="flex shrink-0 items-center gap-3">
-                <div className="h-px flex-1 bg-white/10" />
+                <div className="h-px flex-1 bg-border" />
                 <span className="text-xs text-muted-foreground">or fill in manually</span>
-                <div className="h-px flex-1 bg-white/10" />
+                <div className="h-px flex-1 bg-border" />
               </div>
             )}
 
@@ -235,7 +233,7 @@ export function MovieFormModal({
                     <img
                       src={poster_url}
                       alt="poster preview"
-                      className="h-24 w-16 rounded-lg border border-white/10 object-cover"
+                      className="h-24 w-16 rounded-md border border-border object-cover"
                     />
                   )}
                 </div>
@@ -290,18 +288,16 @@ export function MovieFormModal({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="rounded-xl px-4 py-2 text-sm font-medium hover:bg-white/5"
+                  className="rounded-md px-4 py-2 text-sm font-medium hover:bg-muted"
                 >
                   Cancel
                 </button>
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
+                <button
                   type="submit"
-                  className="premium-btn rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                  className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:brightness-105"
                 >
                   {isEdit ? "Save changes" : "Add movie"}
-                </motion.button>
+                </button>
               </div>
             </div>
           </form>
@@ -312,7 +308,7 @@ export function MovieFormModal({
 }
 
 const inputCls =
-  "w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-primary/40 transition";
+  "w-full bg-card border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal/40 transition";
 
 function Field({
   label,

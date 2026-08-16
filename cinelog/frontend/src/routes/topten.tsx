@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Crown, X } from "lucide-react";
 import { motion } from "motion/react";
 import { Layout } from "@/components/Layout";
-import { FadeItem, PageMotion } from "@/components/PageMotion";
+import { FadeItem, PageHeader, PageMotion } from "@/components/PageMotion";
 import { useMovies } from "@/store/MoviesContext";
 
 export const Route = createFileRoute("/topten")({
@@ -37,49 +37,45 @@ function TopTenPage() {
   return (
     <Layout>
       <PageMotion>
-        <FadeItem className="mb-10">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.28em] text-primary">
-            Curated Canon
-          </p>
-          <h1 className="text-4xl font-semibold sm:text-5xl lg:text-6xl">
-            My <span className="text-shimmer">Top 10</span>
-          </h1>
-          <p className="mt-3 max-w-2xl text-muted-foreground">
-            The films you'd defend at any dinner party. Reorder freely.
-          </p>
+        <FadeItem>
+          <PageHeader
+            eyebrow="Canon"
+            title="My"
+            accent="Top 10"
+            description="The films you'd defend at any dinner party. Reorder freely."
+          />
         </FadeItem>
 
-        <FadeItem className="glass mb-8 rounded-2xl p-5">
-          <h2 className="mb-3 text-sm font-semibold">Assign a movie to a rank</h2>
+        <FadeItem className="surface mb-8 rounded-xl p-5">
+          <h2 className="mb-3 text-sm font-semibold text-foreground">Assign a rank</h2>
           <AssignForm candidates={candidates} usedRanks={usedRanks} onAssign={handleAssign} />
         </FadeItem>
 
         {topTen.length === 0 ? (
           <FadeItem>
-            <div className="glass rounded-2xl py-20 text-center text-muted-foreground">
+            <div className="surface rounded-xl py-20 text-center text-muted-foreground">
               No Top 10 entries yet. Add some from a movie's detail page.
             </div>
           </FadeItem>
         ) : (
-          <ol className="space-y-4">
+          <ol className="space-y-3">
             {topTen.map((m, i) => {
               const isOne = m.top_ten_rank === 1;
               return (
                 <motion.li
                   key={m.id}
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.06, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                  whileHover={{ scale: 1.01, x: 4 }}
-                  className={`group flex items-stretch gap-5 overflow-hidden rounded-2xl transition-shadow ${
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.04, duration: 0.4 }}
+                  className={`flex items-stretch gap-4 overflow-hidden rounded-xl border transition-colors sm:gap-5 ${
                     isOne
-                      ? "glass-strong glow-ring bg-gradient-to-r from-primary/20 via-primary/5 to-transparent p-6"
-                      : "glass p-4 hover:shadow-[0_20px_40px_-24px_oklch(0.84_0.15_88_/_0.35)]"
+                      ? "border-primary/35 bg-gradient-to-r from-primary/10 via-card to-teal/5 p-5"
+                      : "surface p-4 hover:border-teal/30"
                   }`}
                 >
                   <div
-                    className={`flex shrink-0 items-center justify-center font-bold ${
-                      isOne ? "w-24 text-7xl text-primary" : "w-16 text-5xl text-muted-foreground/50"
+                    className={`flex shrink-0 items-center justify-center font-semibold ${
+                      isOne ? "w-16 text-5xl text-primary sm:w-20 sm:text-6xl" : "w-12 text-4xl text-steel/70"
                     }`}
                     style={{ fontFamily: "var(--font-display)" }}
                   >
@@ -88,15 +84,15 @@ function TopTenPage() {
 
                   <Link to="/movies/$id" params={{ id: m.id }} className="shrink-0">
                     <div
-                      className={`overflow-hidden rounded-xl bg-muted ring-1 ring-white/10 ${
-                        isOne ? "h-48 w-32" : "h-36 w-20 sm:w-24"
+                      className={`overflow-hidden rounded-lg bg-muted ring-1 ring-border ${
+                        isOne ? "h-40 w-28" : "h-32 w-20 sm:w-22"
                       }`}
                     >
                       {m.poster_url ? (
                         <img
                           src={m.poster_url}
                           alt={m.title}
-                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                          className="h-full w-full object-cover"
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center p-2 text-center text-xs text-muted-foreground">
@@ -108,31 +104,27 @@ function TopTenPage() {
 
                   <div className="flex min-w-0 flex-1 flex-col justify-center">
                     {isOne && (
-                      <span className="mb-2 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-primary">
-                        <Crown className="h-3.5 w-3.5" /> All-time favourite
+                      <span className="mb-1.5 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">
+                        <Crown className="h-3.5 w-3.5" /> Favourite
                       </span>
                     )}
                     <h3
-                      className={`truncate font-semibold leading-tight ${isOne ? "text-3xl" : "text-xl"}`}
+                      className={`truncate font-semibold leading-tight ${isOne ? "text-2xl sm:text-3xl" : "text-lg"}`}
                       style={isOne ? { fontFamily: "var(--font-display)" } : undefined}
                     >
                       <Link
                         to="/movies/$id"
                         params={{ id: m.id }}
-                        className="transition-colors hover:text-primary"
+                        className="hover:text-teal"
                       >
                         {m.title}
                       </Link>
                     </h3>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      {m.genre} · {m.release_year}
+                      <span className="text-teal">{m.genre}</span> · {m.release_year}
                     </p>
                     {m.rating != null && (
-                      <p
-                        className={`mt-1 font-semibold text-primary ${isOne ? "text-lg" : "text-sm"}`}
-                      >
-                        ★ {m.rating.toFixed(1)}
-                      </p>
+                      <p className="mt-1 text-sm font-semibold text-rose">★ {m.rating.toFixed(1)}</p>
                     )}
                     {isOne && m.favourite_quote && (
                       <p className="mt-3 line-clamp-2 text-sm italic text-muted-foreground">
@@ -145,7 +137,7 @@ function TopTenPage() {
                     <select
                       value={m.top_ten_rank!}
                       onChange={(e) => setTopTenRank(m.id, Number(e.target.value))}
-                      className="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs"
+                      className="rounded-md border border-border bg-card px-2 py-1 text-xs"
                     >
                       {Array.from({ length: 10 }, (_, i) => i + 1).map((r) => (
                         <option key={r} value={r}>
@@ -155,7 +147,7 @@ function TopTenPage() {
                     </select>
                     <button
                       onClick={() => toggleTopTen(m.id)}
-                      className="inline-flex items-center gap-1 text-xs text-muted-foreground transition hover:text-destructive"
+                      className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive"
                     >
                       <X className="h-3.5 w-3.5" /> Remove
                     </button>
@@ -189,8 +181,7 @@ function AssignForm({
     setRank("");
   };
 
-  const inputCls =
-    "bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm backdrop-blur-md";
+  const inputCls = "bg-card border border-border rounded-md px-3 py-2 text-sm";
 
   return (
     <form onSubmit={submit} className="flex flex-wrap items-end gap-3">
@@ -206,19 +197,17 @@ function AssignForm({
         <option value="">Rank…</option>
         {Array.from({ length: 10 }, (_, i) => i + 1).map((r) => (
           <option key={r} value={r}>
-            #{r} {usedRanks.has(r) ? "(will replace)" : ""}
+            #{r} {usedRanks.has(r) ? "(replace)" : ""}
           </option>
         ))}
       </select>
-      <motion.button
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.97 }}
+      <button
         type="submit"
         disabled={!movieId || !rank}
-        className="premium-btn rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-40"
+        className="rounded-md bg-teal px-4 py-2 text-sm font-semibold text-accent-foreground disabled:opacity-40"
       >
         Assign
-      </motion.button>
+      </button>
     </form>
   );
 }

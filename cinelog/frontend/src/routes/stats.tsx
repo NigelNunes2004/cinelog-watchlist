@@ -15,7 +15,7 @@ import {
 } from "recharts";
 import { motion } from "motion/react";
 import { Layout } from "@/components/Layout";
-import { FadeItem, PageMotion } from "@/components/PageMotion";
+import { FadeItem, PageHeader, PageMotion } from "@/components/PageMotion";
 import { useMovies } from "@/store/MoviesContext";
 
 export const Route = createFileRoute("/stats")({
@@ -33,14 +33,14 @@ export const Route = createFileRoute("/stats")({
 });
 
 const GENRE_COLORS = [
-  "oklch(0.84 0.15 88)",
-  "oklch(0.65 0.18 280)",
-  "oklch(0.7 0.16 162)",
-  "oklch(0.72 0.18 30)",
-  "oklch(0.7 0.2 320)",
-  "oklch(0.78 0.15 200)",
-  "oklch(0.68 0.2 15)",
-  "oklch(0.75 0.12 130)",
+  "oklch(0.82 0.14 82)",
+  "oklch(0.72 0.11 195)",
+  "oklch(0.72 0.14 25)",
+  "oklch(0.68 0.1 145)",
+  "oklch(0.62 0.06 240)",
+  "oklch(0.75 0.12 55)",
+  "oklch(0.7 0.1 220)",
+  "oklch(0.68 0.12 10)",
 ];
 
 function StatsPage() {
@@ -62,96 +62,106 @@ function StatsPage() {
     const genreMap = new Map<string, number>();
     movies.forEach((m) => genreMap.set(m.genre, (genreMap.get(m.genre) || 0) + 1));
     const genreData = Array.from(genreMap.entries()).map(([name, value]) => ({ name, value }));
-
     const top5 = [...rated].sort((a, b) => b.rating! - a.rating!).slice(0, 5);
 
     return { watched, avg, mostRewatched, ratingDist, genreData, top5 };
   }, [movies]);
 
+  const cards = [
+    {
+      icon: <Film className="h-4 w-4" />,
+      label: "Total Movies",
+      value: String(movies.length),
+      tone: "amber" as const,
+    },
+    {
+      icon: <Eye className="h-4 w-4" />,
+      label: "Watched",
+      value: String(stats.watched.length),
+      tone: "teal" as const,
+    },
+    {
+      icon: <Star className="h-4 w-4" />,
+      label: "Avg Rating",
+      value: stats.avg ? stats.avg.toFixed(1) : "—",
+      tone: "rose" as const,
+    },
+    {
+      icon: <RotateCcw className="h-4 w-4" />,
+      label: "Most Rewatched",
+      value: stats.mostRewatched ? stats.mostRewatched.title : "—",
+      sub: stats.mostRewatched ? `${stats.mostRewatched.rewatch_count}×` : undefined,
+      tone: "steel" as const,
+    },
+  ];
+
   return (
     <Layout>
       <PageMotion>
-        <FadeItem className="mb-10">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.28em] text-primary">
-            Insights
-          </p>
-          <h1 className="text-4xl font-semibold sm:text-5xl lg:text-6xl">
-            Your Viewing <span className="text-shimmer">Story</span>
-          </h1>
-          <p className="mt-3 max-w-2xl text-muted-foreground">
-            A panoramic look at what you've watched, loved, and revisited.
-          </p>
+        <FadeItem>
+          <PageHeader
+            eyebrow="Analytics"
+            title="Your viewing"
+            accent="story"
+            description="Habits, favourites, and patterns across your collection."
+          />
         </FadeItem>
 
-        <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {[
-            { icon: <Film />, label: "Total Movies", value: String(movies.length) },
-            { icon: <Eye />, label: "Total Watched", value: String(stats.watched.length) },
-            {
-              icon: <Star />,
-              label: "Average Rating",
-              value: stats.avg ? stats.avg.toFixed(1) : "—",
-            },
-            {
-              icon: <RotateCcw />,
-              label: "Most Rewatched",
-              value: stats.mostRewatched ? stats.mostRewatched.title : "—",
-              sub: stats.mostRewatched ? `${stats.mostRewatched.rewatch_count}×` : undefined,
-            },
-          ].map((card, i) => (
+        <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+          {cards.map((card) => (
             <FadeItem key={card.label}>
-              <StatCard {...card} delay={i} />
+              <StatCard {...card} />
             </FadeItem>
           ))}
         </div>
 
-        <div className="mb-8 grid gap-6 lg:grid-cols-2">
+        <div className="mb-8 grid gap-4 lg:grid-cols-2">
           <FadeItem>
-            <ChartCard title="Rating Distribution">
+            <ChartCard title="Rating distribution" accent="rose">
               <ResponsiveContainer width="100%" height={280}>
                 <BarChart data={stats.ratingDist}>
-                  <XAxis dataKey="rating" stroke="oklch(0.7 0.02 260)" />
-                  <YAxis allowDecimals={false} stroke="oklch(0.7 0.02 260)" />
+                  <XAxis dataKey="rating" stroke="oklch(0.55 0.02 60)" fontSize={12} />
+                  <YAxis allowDecimals={false} stroke="oklch(0.55 0.02 60)" fontSize={12} />
                   <Tooltip
                     contentStyle={{
-                      background: "oklch(0.14 0.03 265 / 0.95)",
-                      border: "1px solid oklch(0.4 0.05 265 / 0.4)",
-                      borderRadius: 12,
+                      background: "oklch(0.17 0.02 50)",
+                      border: "1px solid oklch(0.35 0.02 55)",
+                      borderRadius: 8,
                     }}
-                    cursor={{ fill: "oklch(0.28 0.04 260 / 0.4)" }}
+                    cursor={{ fill: "oklch(0.25 0.02 55 / 0.4)" }}
                   />
-                  <Bar dataKey="count" fill="oklch(0.84 0.15 88)" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="count" fill="oklch(0.72 0.14 25)" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </ChartCard>
           </FadeItem>
 
           <FadeItem>
-            <ChartCard title="Genre Breakdown">
+            <ChartCard title="Genre breakdown" accent="teal">
               <ResponsiveContainer width="100%" height={280}>
                 <PieChart>
                   <Pie
                     data={stats.genreData}
                     dataKey="value"
                     nameKey="name"
-                    innerRadius={60}
-                    outerRadius={100}
-                    paddingAngle={3}
+                    innerRadius={58}
+                    outerRadius={96}
+                    paddingAngle={2}
                   >
                     {stats.genreData.map((_, i) => (
                       <Cell
                         key={i}
                         fill={GENRE_COLORS[i % GENRE_COLORS.length]}
-                        stroke="oklch(0.09 0.02 265)"
+                        stroke="oklch(0.13 0.018 55)"
                         strokeWidth={2}
                       />
                     ))}
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      background: "oklch(0.14 0.03 265 / 0.95)",
-                      border: "1px solid oklch(0.4 0.05 265 / 0.4)",
-                      borderRadius: 12,
+                      background: "oklch(0.17 0.02 50)",
+                      border: "1px solid oklch(0.35 0.02 55)",
+                      borderRadius: 8,
                     }}
                   />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
@@ -162,28 +172,27 @@ function StatsPage() {
         </div>
 
         <FadeItem>
-          <ChartCard title="Top 5 Rated">
+          <ChartCard title="Top 5 rated" accent="amber">
             {stats.top5.length === 0 ? (
               <p className="text-sm text-muted-foreground">Rate some movies to see your top 5.</p>
             ) : (
-              <ol className="space-y-3">
+              <ol className="space-y-2">
                 {stats.top5.map((m, i) => (
                   <motion.li
                     key={m.id}
-                    initial={{ opacity: 0, x: -12 }}
+                    initial={{ opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 + i * 0.05 }}
-                    whileHover={{ x: 6 }}
-                    className="flex items-center gap-4 rounded-xl p-2 transition-colors hover:bg-white/5"
+                    transition={{ delay: 0.1 + i * 0.04 }}
+                    className="flex items-center gap-4 rounded-lg p-2 transition-colors hover:bg-muted/50"
                   >
                     <span
-                      className="w-8 text-center text-3xl font-bold text-muted-foreground/40"
+                      className="w-7 text-center text-2xl font-semibold text-steel/50"
                       style={{ fontFamily: "var(--font-display)" }}
                     >
                       {i + 1}
                     </span>
                     <Link to="/movies/$id" params={{ id: m.id }} className="shrink-0">
-                      <div className="h-16 w-12 overflow-hidden rounded-lg bg-muted ring-1 ring-white/10">
+                      <div className="h-14 w-10 overflow-hidden rounded-md bg-muted ring-1 ring-border">
                         {m.poster_url && (
                           <img
                             src={m.poster_url}
@@ -197,7 +206,7 @@ function StatsPage() {
                       <Link
                         to="/movies/$id"
                         params={{ id: m.id }}
-                        className="block truncate font-semibold hover:text-primary"
+                        className="block truncate text-sm font-semibold hover:text-teal"
                       >
                         {m.title}
                       </Link>
@@ -205,7 +214,7 @@ function StatsPage() {
                         {m.genre} · {m.release_year}
                       </p>
                     </div>
-                    <span className="font-bold text-primary">★ {m.rating!.toFixed(1)}</span>
+                    <span className="text-sm font-bold text-rose">★ {m.rating!.toFixed(1)}</span>
                   </motion.li>
                 ))}
               </ol>
@@ -222,41 +231,62 @@ function StatCard({
   label,
   value,
   sub,
+  tone,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string;
   sub?: string;
-  delay?: number;
+  tone: "amber" | "teal" | "rose" | "steel";
 }) {
+  const tones = {
+    amber: "text-primary bg-primary/10 ring-primary/20",
+    teal: "text-teal bg-teal/10 ring-teal/20",
+    rose: "text-rose bg-rose/10 ring-rose/20",
+    steel: "text-steel bg-steel/10 ring-steel/20",
+  };
+
   return (
-    <motion.div
-      whileHover={{ y: -4, scale: 1.02 }}
-      className="glass group rounded-2xl p-5 transition"
-    >
-      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-        <span className="text-primary transition group-hover:scale-110 [&>svg]:h-4 [&>svg]:w-4">
-          {icon}
+    <div className="surface rounded-xl p-4 sm:p-5">
+      <div className="flex items-center gap-2.5">
+        <span className={`rounded-md p-1.5 ring-1 ${tones[tone]}`}>{icon}</span>
+        <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+          {label}
         </span>
-        {label}
       </div>
       <div
-        className="mt-3 truncate text-2xl font-semibold"
+        className="mt-3 truncate text-xl font-semibold sm:text-2xl"
         style={{ fontFamily: "var(--font-display)" }}
       >
         {value}
       </div>
-      {sub && <div className="mt-1 text-xs text-primary">{sub}</div>}
-    </motion.div>
+      {sub && <div className="mt-1 text-xs font-medium text-teal">{sub}</div>}
+    </div>
   );
 }
 
-function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
+function ChartCard({
+  title,
+  accent,
+  children,
+}: {
+  title: string;
+  accent: "amber" | "teal" | "rose";
+  children: React.ReactNode;
+}) {
+  const bar = {
+    amber: "bg-primary",
+    teal: "bg-teal",
+    rose: "bg-rose",
+  };
   return (
-    <div className="glass rounded-2xl p-5">
-      <h2 className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-        {title}
-      </h2>
+    <div className="surface rounded-xl p-5">
+      <div className="mb-4 flex items-center gap-2.5">
+        <span className={`h-3 w-1 rounded-full ${bar[accent]}`} />
+        <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          {title}
+        </h2>
+      </div>
       {children}
     </div>
   );

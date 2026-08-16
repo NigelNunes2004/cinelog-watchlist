@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import { Layout } from "@/components/Layout";
 import { StatusBadge } from "@/components/StatusBadge";
 import { MovieFormModal } from "@/components/MovieFormModal";
-import { FadeItem, MagneticButton, PageMotion } from "@/components/PageMotion";
+import { FadeItem, PageMotion } from "@/components/PageMotion";
 import { useMovies } from "@/store/MoviesContext";
 
 export const Route = createFileRoute("/movies/$id")({
@@ -29,7 +29,7 @@ function MovieDetailPage() {
       <Layout>
         <div className="py-20 text-center">
           <h1 className="text-2xl font-semibold">Movie not found</h1>
-          <Link to="/" className="mt-4 inline-block text-primary">
+          <Link to="/" className="mt-4 inline-block text-teal">
             Back to watchlist
           </Link>
         </div>
@@ -43,19 +43,18 @@ function MovieDetailPage() {
         <FadeItem>
           <Link
             to="/"
-            className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-primary"
+            className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-teal"
           >
             <ArrowLeft className="h-4 w-4" /> Back to Watchlist
           </Link>
         </FadeItem>
 
-        <div className="grid gap-10 md:grid-cols-[minmax(0,360px)_1fr] lg:gap-16">
+        <div className="grid gap-10 md:grid-cols-[minmax(0,340px)_1fr] lg:gap-14">
           <FadeItem>
             <motion.div
-              whileHover={{ scale: 1.02, rotateY: 2 }}
-              transition={{ type: "spring", stiffness: 200, damping: 20 }}
-              className="relative aspect-[2/3] overflow-hidden rounded-3xl bg-muted shadow-2xl shadow-black/60 glow-ring"
-              style={{ transformStyle: "preserve-3d" }}
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="relative aspect-[2/3] overflow-hidden rounded-xl bg-muted shadow-2xl shadow-black/40 ring-1 ring-border"
             >
               {movie.poster_url ? (
                 <img
@@ -69,26 +68,27 @@ function MovieDetailPage() {
                 </div>
               )}
               {movie.is_top_ten && movie.top_ten_rank && (
-                <div className="absolute top-4 left-4 flex items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-sm font-bold text-primary-foreground shadow-xl shadow-primary/40">
-                  <Crown className="h-4 w-4" /> Top 10 · #{movie.top_ten_rank}
+                <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-md bg-background/90 px-2.5 py-1.5 text-xs font-semibold text-primary ring-1 ring-primary/30 backdrop-blur-sm">
+                  <Crown className="h-3.5 w-3.5" /> Top 10 · #{movie.top_ten_rank}
                 </div>
               )}
             </motion.div>
           </FadeItem>
 
           <FadeItem>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.28em] text-primary">
-              {movie.genre} · {movie.release_year}
-            </p>
-            <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-              {movie.title}
-            </h1>
+            <div className="mb-3 flex items-center gap-3">
+              <span className="h-px w-8 bg-teal" />
+              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-teal">
+                {movie.genre} · {movie.release_year}
+              </p>
+            </div>
+            <h1 className="text-4xl font-medium leading-tight sm:text-5xl">{movie.title}</h1>
 
-            <div className="mt-5 flex flex-wrap items-center gap-4">
+            <div className="mt-5 flex flex-wrap items-center gap-3">
               <StatusBadge status={movie.status} />
               {movie.status === "watched" && movie.rating != null && (
-                <span className="flex items-center gap-1.5 text-lg font-semibold text-primary">
-                  <Star className="h-5 w-5 fill-current" /> {movie.rating.toFixed(1)}{" "}
+                <span className="flex items-center gap-1.5 text-lg font-semibold text-rose">
+                  <Star className="h-5 w-5 fill-current" /> {movie.rating.toFixed(1)}
                   <span className="text-sm font-normal text-muted-foreground">/ 10</span>
                 </span>
               )}
@@ -98,34 +98,34 @@ function MovieDetailPage() {
             </div>
 
             <div className="mt-8 flex flex-wrap gap-2">
-              <MagneticButton
+              <button
                 onClick={() => incrementRewatch(movie.id)}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium backdrop-blur-md hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-sm font-medium transition hover:border-teal/40 hover:text-teal"
               >
                 <RotateCcw className="h-4 w-4" /> + Rewatch
-              </MagneticButton>
-              <MagneticButton
+              </button>
+              <button
                 onClick={() => toggleTopTen(movie.id)}
-                className={`premium-btn inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
+                className={`inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition ${
                   movie.is_top_ten
-                    ? "border border-white/10 bg-white/5 text-foreground hover:bg-destructive/20"
-                    : "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
+                    ? "border border-border bg-card hover:border-destructive/40 hover:text-destructive"
+                    : "bg-primary text-primary-foreground hover:brightness-105"
                 }`}
               >
                 <Crown className="h-4 w-4" />
                 {movie.is_top_ten ? "Remove from Top 10" : "Add to Top 10"}
-              </MagneticButton>
-              <MagneticButton
+              </button>
+              <button
                 onClick={() => setEditing(true)}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2.5 text-sm font-medium hover:bg-white/5"
+                className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-muted/60"
               >
                 <Pencil className="h-4 w-4" /> Edit
-              </MagneticButton>
+              </button>
             </div>
 
             {movie.favourite_quote && (
-              <blockquote className="glass mt-10 rounded-2xl border-l-4 border-primary p-5">
-                <p className="text-xl italic" style={{ fontFamily: "var(--font-display)" }}>
+              <blockquote className="surface mt-10 rounded-xl border-l-[3px] border-l-primary p-5">
+                <p className="text-lg italic leading-relaxed" style={{ fontFamily: "var(--font-display)" }}>
                   "{movie.favourite_quote}"
                 </p>
               </blockquote>
@@ -133,16 +133,17 @@ function MovieDetailPage() {
 
             {movie.review && (
               <div className="mt-8">
-                <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  <span className="h-3 w-1 rounded-full bg-teal" />
                   My review
                 </h2>
-                <p className="whitespace-pre-line text-base leading-relaxed text-foreground/90">
+                <p className="whitespace-pre-line text-[15px] leading-relaxed text-foreground/90">
                   {movie.review}
                 </p>
               </div>
             )}
 
-            <dl className="mt-10 grid grid-cols-2 gap-6 border-t border-white/10 pt-8 sm:grid-cols-4">
+            <dl className="mt-10 grid grid-cols-2 gap-5 border-t border-border pt-8 sm:grid-cols-4">
               <Stat label="Status" value={movie.status} />
               <Stat label="Rating" value={movie.rating != null ? movie.rating.toFixed(1) : "—"} />
               <Stat label="Rewatches" value={String(movie.rewatch_count)} />

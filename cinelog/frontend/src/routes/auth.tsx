@@ -1,10 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, FormEvent, useEffect } from "react";
-import { Film, Mail, Lock, User, Loader2, Sparkles } from "lucide-react";
+import { Film, Mail, Lock, User, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useAuth } from "@/store/AuthContext";
 import { AntigravityField } from "@/components/AntigravityField";
-import { MagneticButton } from "@/components/PageMotion";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
@@ -26,16 +25,14 @@ function AuthPage() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!loading && user) {
-      navigate({ to: "/" });
-    }
+    if (!loading && user) navigate({ to: "/" });
   }, [loading, user, navigate]);
 
   if (loading || user) {
     return (
       <div className="relative flex min-h-screen items-center justify-center">
         <AntigravityField />
-        <Loader2 className="relative z-10 h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="relative z-10 h-7 w-7 animate-spin text-teal" />
       </div>
     );
   }
@@ -69,65 +66,57 @@ function AuthPage() {
     <div className="relative min-h-screen overflow-hidden">
       <AntigravityField />
 
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-4 py-12 lg:flex-row lg:gap-20">
+      <div className="relative z-10 mx-auto grid min-h-screen max-w-6xl items-center gap-12 px-4 py-14 lg:grid-cols-2 lg:gap-16 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, x: -40, filter: "blur(12px)" }}
-          animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-12 max-w-md text-center lg:mb-0 lg:text-left"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
+          className="hidden lg:block"
         >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.15 }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-primary"
-          >
-            <Sparkles className="h-3.5 w-3.5" />
-            Your private cinema
-          </motion.div>
-          <h1 className="text-5xl font-semibold leading-[1.05] sm:text-6xl lg:text-7xl">
+          <div className="mb-5 flex items-center gap-3">
+            <span className="h-px w-10 bg-teal" />
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-teal">
+              Private cinema
+            </p>
+          </div>
+          <h1 className="text-5xl font-medium leading-[1.05] xl:text-6xl">
             Every film,
             <br />
-            <span className="text-shimmer">your story.</span>
+            <span className="text-gradient-cinema italic">your story.</span>
           </h1>
-          <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-            Track what you watch, rate what you love, and curate your personal Top 10 —
-            in a watchlist that feels like a theatre lobby at midnight.
+          <p className="mt-5 max-w-md text-[15px] leading-relaxed text-muted-foreground">
+            Rate, revisit, and rank the movies that stay with you — in a space built for
+            collectors, not checklists.
           </p>
-          <div className="mt-10 hidden gap-8 text-sm lg:flex">
-            <Stat label="Private" value="Per account" />
-            <Stat label="Refresh" value="20 days" />
-            <Stat label="Sync" value="Real-time" />
+          <div className="mt-10 grid grid-cols-3 gap-6 border-t border-border pt-8">
+            <Meta label="Amber" value="Brand" />
+            <Meta label="Teal" value="Focus" />
+            <Meta label="Rose" value="Ratings" />
           </div>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 40, scale: 0.96 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full max-w-md"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+          className="mx-auto w-full max-w-md"
         >
-          <div className="glass-strong relative overflow-hidden rounded-3xl p-8">
-            <div className="pointer-events-none absolute -right-20 -top-20 h-40 w-40 rounded-full bg-primary/20 blur-3xl" />
+          <div className="surface-raised rounded-2xl p-7 sm:p-8">
             <div className="mb-6 flex items-center gap-3">
-              <motion.div
-                animate={{ rotate: [0, 8, -8, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 ring-1 ring-primary/30"
-              >
-                <Film className="h-6 w-6 text-primary" />
-              </motion.div>
+              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-teal/15 ring-1 ring-border">
+                <Film className="h-5 w-5 text-primary" />
+              </span>
               <div>
-                <p className="text-lg font-semibold" style={{ fontFamily: "var(--font-display)" }}>
-                  Cine<span className="text-primary">Log</span>
+                <p className="font-semibold" style={{ fontFamily: "var(--font-display)" }}>
+                  Cine<span className="text-teal">Log</span>
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {mode === "login" ? "Welcome back" : "Start your watchlist"}
+                  {mode === "login" ? "Welcome back" : "Create your account"}
                 </p>
               </div>
             </div>
 
-            <div className="mb-6 flex rounded-xl bg-black/30 p-1 ring-1 ring-white/10">
+            <div className="mb-6 grid grid-cols-2 gap-1 rounded-lg bg-muted/60 p-1">
               {(["login", "signup"] as Mode[]).map((m) => (
                 <button
                   key={m}
@@ -136,27 +125,25 @@ function AuthPage() {
                     setMode(m);
                     setError(null);
                   }}
-                  className="relative flex-1 rounded-lg py-2.5 text-sm font-medium transition-colors"
+                  className={`relative rounded-md py-2 text-sm font-medium transition-colors ${
+                    mode === m ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
                 >
                   {mode === m && (
                     <motion.span
                       layoutId="auth-tab"
-                      className="absolute inset-0 rounded-lg bg-primary shadow-lg shadow-primary/30"
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      className="absolute inset-0 rounded-md bg-card shadow-sm ring-1 ring-border"
+                      transition={{ type: "spring", stiffness: 400, damping: 32 }}
                     />
                   )}
-                  <span
-                    className={`relative z-10 ${
-                      mode === m ? "text-primary-foreground" : "text-muted-foreground"
-                    }`}
-                  >
-                    {m === "login" ? "Sign in" : "Create account"}
+                  <span className="relative z-10">
+                    {m === "login" ? "Sign in" : "Sign up"}
                   </span>
                 </button>
               ))}
             </div>
 
-            <form onSubmit={onSubmit} className="space-y-4">
+            <form onSubmit={onSubmit} className="space-y-3.5">
               <AnimatePresence mode="wait">
                 {mode === "signup" && (
                   <motion.div
@@ -204,20 +191,20 @@ function AuthPage() {
               <AnimatePresence>
                 {error && (
                   <motion.p
-                    initial={{ opacity: 0, y: -6 }}
+                    initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
-                    className="rounded-xl border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+                    className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
                   >
                     {error}
                   </motion.p>
                 )}
               </AnimatePresence>
 
-              <MagneticButton
+              <button
                 type="submit"
                 disabled={submitting}
-                className="premium-btn mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_16px_40px_-12px_oklch(0.84_0.15_88_/_0.65)] disabled:opacity-60"
+                className="mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition hover:brightness-105 disabled:opacity-60"
               >
                 {submitting ? (
                   <>
@@ -229,11 +216,11 @@ function AuthPage() {
                 ) : (
                   "Create account"
                 )}
-              </MagneticButton>
+              </button>
             </form>
 
-            <p className="mt-6 text-center text-xs text-muted-foreground">
-              Sessions stay signed in for up to 20 days.
+            <p className="mt-5 text-center text-xs text-muted-foreground">
+              Sessions stay active for up to 20 days.
             </p>
           </div>
         </motion.div>
@@ -242,11 +229,11 @@ function AuthPage() {
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Meta({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-wider text-primary/80">{label}</p>
-      <p className="font-medium text-foreground">{value}</p>
+      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</p>
+      <p className="mt-1 text-sm font-medium text-foreground">{value}</p>
     </div>
   );
 }
@@ -264,7 +251,7 @@ function Field({
     <label className="block">
       <span className="mb-1.5 block text-xs font-medium text-muted-foreground">{label}</span>
       <div className="relative">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+        <span className="absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground">
           {icon}
         </span>
         {children}
@@ -274,4 +261,4 @@ function Field({
 }
 
 const inputCls =
-  "w-full rounded-xl border border-white/10 bg-white/5 py-2.5 pl-9 pr-3 text-sm backdrop-blur-md transition focus:outline-none focus:ring-2 focus:ring-primary/40";
+  "w-full rounded-md border border-border bg-card py-2.5 pl-9 pr-3 text-sm transition focus:outline-none focus:ring-2 focus:ring-teal/40";

@@ -1,22 +1,21 @@
 import { motion, type HTMLMotionProps } from "motion/react";
 import type { ReactNode } from "react";
 
-const ease = [0.22, 1, 0.36, 1] as const;
+const ease = [0.25, 0.1, 0.25, 1] as const;
 
 export const fadeUp = {
-  hidden: { opacity: 0, y: 28, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 16 },
   show: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.7, ease },
+    transition: { duration: 0.45, ease },
   },
 };
 
 export const stagger = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.07, delayChildren: 0.08 },
+    transition: { staggerChildren: 0.05, delayChildren: 0.04 },
   },
 };
 
@@ -50,35 +49,44 @@ export function FadeItem({
   );
 }
 
-export function MagneticButton({
-  children,
-  className,
-  strength = 0.35,
-  ...rest
+export function PageHeader({
+  eyebrow,
+  title,
+  accent,
+  description,
+  action,
 }: {
-  children: ReactNode;
-  className?: string;
-  strength?: number;
-} & HTMLMotionProps<"button">) {
+  eyebrow: string;
+  title: string;
+  accent?: string;
+  description?: string;
+  action?: ReactNode;
+}) {
   return (
-    <motion.button
-      className={className}
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
-      transition={{ type: "spring", stiffness: 400, damping: 22 }}
-      onMouseMove={(e) => {
-        const el = e.currentTarget;
-        const rect = el.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        el.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translate(0px, 0px)";
-      }}
-      {...rest}
-    >
-      {children}
-    </motion.button>
+    <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
+      <div className="max-w-2xl">
+        <div className="mb-3 flex items-center gap-3">
+          <span className="h-px w-8 bg-teal" />
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-teal">
+            {eyebrow}
+          </p>
+        </div>
+        <h1 className="text-4xl font-medium leading-[1.08] tracking-tight sm:text-5xl">
+          {title}
+          {accent ? (
+            <>
+              {" "}
+              <span className="text-gradient-cinema italic">{accent}</span>
+            </>
+          ) : null}
+        </h1>
+        {description ? (
+          <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
+            {description}
+          </p>
+        ) : null}
+      </div>
+      {action}
+    </div>
   );
 }

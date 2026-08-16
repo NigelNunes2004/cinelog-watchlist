@@ -6,7 +6,7 @@ import { Layout } from "@/components/Layout";
 import { MovieCard } from "@/components/MovieCard";
 import { FilterBar, defaultFilters, type Filters } from "@/components/FilterBar";
 import { MovieFormModal } from "@/components/MovieFormModal";
-import { FadeItem, MagneticButton, PageMotion } from "@/components/PageMotion";
+import { FadeItem, PageHeader, PageMotion } from "@/components/PageMotion";
 import { useMovies } from "@/store/MoviesContext";
 
 export const Route = createFileRoute("/")({
@@ -27,6 +27,9 @@ function WatchlistPage() {
   const { movies } = useMovies();
   const [filters, setFilters] = useState<Filters>(defaultFilters);
   const [adding, setAdding] = useState(false);
+
+  const watched = movies.filter((m) => m.status === "watched").length;
+  const watching = movies.filter((m) => m.status === "watching").length;
 
   const visible = useMemo(() => {
     let list = [...movies];
@@ -53,32 +56,34 @@ function WatchlistPage() {
   return (
     <Layout>
       <PageMotion>
-        <FadeItem className="mb-10 flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.28em] text-primary">
-              Your Watchlist
-            </p>
-            <h1 className="text-4xl font-semibold leading-[1.05] sm:text-5xl lg:text-6xl">
-              Every film, <span className="text-shimmer">catalogued.</span>
-            </h1>
-            <p className="mt-3 max-w-xl text-muted-foreground">
-              <span className="text-foreground/90">{movies.length}</span> films ·{" "}
-              <span className="text-foreground/90">
-                {movies.filter((m) => m.status === "watched").length}
-              </span>{" "}
-              watched ·{" "}
-              <span className="text-foreground/90">
-                {movies.filter((m) => m.status === "watching").length}
-              </span>{" "}
-              in progress
-            </p>
+        <FadeItem>
+          <PageHeader
+            eyebrow="Collection"
+            title="Every film,"
+            accent="catalogued."
+            description={undefined}
+            action={
+              <button
+                onClick={() => setAdding(true)}
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:brightness-105"
+              >
+                <Plus className="h-4 w-4" /> Add Movie
+              </button>
+            }
+          />
+          <div className="-mt-6 mb-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
+            <span>
+              <strong className="font-semibold text-foreground">{movies.length}</strong> films
+            </span>
+            <span className="text-border">|</span>
+            <span>
+              <strong className="font-semibold text-rose">{watched}</strong> watched
+            </span>
+            <span className="text-border">|</span>
+            <span>
+              <strong className="font-semibold text-teal">{watching}</strong> in progress
+            </span>
           </div>
-          <MagneticButton
-            onClick={() => setAdding(true)}
-            className="premium-btn inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_12px_40px_-12px_oklch(0.84_0.15_88_/_0.7)] transition"
-          >
-            <Plus className="h-4 w-4" /> Add Movie
-          </MagneticButton>
         </FadeItem>
 
         <FadeItem className="mb-8">
@@ -91,7 +96,7 @@ function WatchlistPage() {
 
         {visible.length === 0 ? (
           <FadeItem>
-            <div className="glass rounded-2xl py-24 text-center text-muted-foreground">
+            <div className="surface rounded-xl py-20 text-center text-muted-foreground">
               No movies match your filters.
             </div>
           </FadeItem>
@@ -99,7 +104,7 @@ function WatchlistPage() {
           <motion.div
             variants={{
               hidden: {},
-              show: { transition: { staggerChildren: 0.045 } },
+              show: { transition: { staggerChildren: 0.035 } },
             }}
             className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 md:grid-cols-4 lg:grid-cols-5"
           >
@@ -107,12 +112,11 @@ function WatchlistPage() {
               <motion.div
                 key={m.id}
                 variants={{
-                  hidden: { opacity: 0, y: 24, scale: 0.96 },
+                  hidden: { opacity: 0, y: 14 },
                   show: {
                     opacity: 1,
                     y: 0,
-                    scale: 1,
-                    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+                    transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] },
                   },
                 }}
               >

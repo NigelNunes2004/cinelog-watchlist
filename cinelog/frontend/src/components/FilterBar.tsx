@@ -1,6 +1,5 @@
 // @ts-expect-error - JS mock data
 import { GENRES } from "@/mock/data";
-import { motion } from "motion/react";
 
 export type SortKey = "title" | "rating" | "release_year" | "created_at";
 export type Order = "asc" | "desc";
@@ -29,13 +28,12 @@ export function FilterBar({
   onClear: () => void;
 }) {
   const sel =
-    "bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-primary/40 transition";
+    "bg-card border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal/35 transition";
+
   return (
-    <motion.div
-      layout
-      className="glass flex flex-wrap items-end gap-3 rounded-2xl p-4"
-    >
-      <Group label="Genre">
+    <div className="surface flex flex-wrap items-end gap-3 rounded-xl p-4">
+      <div className="rule-cinema mb-1 w-full" />
+      <Group label="Genre" tone="teal">
         <select
           className={sel}
           value={filters.genre}
@@ -49,7 +47,7 @@ export function FilterBar({
           ))}
         </select>
       </Group>
-      <Group label="Status">
+      <Group label="Status" tone="rose">
         <select
           className={sel}
           value={filters.status}
@@ -61,7 +59,7 @@ export function FilterBar({
           <option value="watched">Watched</option>
         </select>
       </Group>
-      <Group label="Sort by">
+      <Group label="Sort by" tone="amber">
         <select
           className={sel}
           value={filters.sortBy}
@@ -75,7 +73,7 @@ export function FilterBar({
           <option value="release_year">Release year</option>
         </select>
       </Group>
-      <Group label="Order">
+      <Group label="Order" tone="steel">
         <select
           className={sel}
           value={filters.order}
@@ -89,18 +87,32 @@ export function FilterBar({
       </Group>
       <button
         onClick={onClear}
-        className="ml-auto rounded-lg px-3 py-2 text-sm text-muted-foreground transition hover:bg-white/5 hover:text-primary"
+        className="ml-auto rounded-md px-3 py-2 text-sm text-muted-foreground transition hover:bg-secondary/50 hover:text-teal"
       >
-        Clear filters
+        Reset
       </button>
-    </motion.div>
+    </div>
   );
 }
 
-function Group({ label, children }: { label: string; children: React.ReactNode }) {
+function Group({
+  label,
+  tone,
+  children,
+}: {
+  label: string;
+  tone: "teal" | "rose" | "amber" | "steel";
+  children: React.ReactNode;
+}) {
+  const colors = {
+    teal: "text-teal",
+    rose: "text-rose",
+    amber: "text-primary",
+    steel: "text-steel",
+  };
   return (
-    <div className="flex flex-col gap-1">
-      <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+    <div className="flex flex-col gap-1.5">
+      <span className={`text-[10px] font-semibold uppercase tracking-[0.14em] ${colors[tone]}`}>
         {label}
       </span>
       {children}
